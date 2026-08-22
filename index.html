@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PRP for Osteoarthritis — Clinical Companion Tool</title>
+<meta name="description" content="A free, evidence-anchored companion tool for healthcare professionals considering platelet-rich plasma for osteoarthritis: candidacy screening, product characterisation and dose calculation, an evidence explorer, and outcome tracking with MCID thresholds. Not medical advice; not a medical device.">
+<meta name="author" content="Dr. Hafez Selim, MD, PhD">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://abdu94-hash.github.io/prp-oa-tool/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PRP for Osteoarthritis — Clinical Companion Tool">
+<meta property="og:description" content="Candidacy screening, product characterisation and platelet dose calculation, evidence explorer, and MCID-anchored outcome tracking. For licensed healthcare professionals. Not medical advice.">
+<meta property="og:url" content="https://abdu94-hash.github.io/prp-oa-tool/">
+<meta property="og:image" content="https://abdu94-hash.github.io/prp-oa-tool/og-image.png">
+<meta property="og:site_name" content="Selim Medical Press">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231f4e79'/%3E%3Ccircle cx='32' cy='26' r='11' fill='%23fff'/%3E%3Ccircle cx='32' cy='26' r='5' fill='%231f4e79'/%3E%3Crect x='27' y='36' width='10' height='18' rx='5' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+ --bg:#f6f7f9;--surface:#fff;--ink:#1a2230;--muted:#5b6675;--line:#dde3ea;
+ --accent:#1f4e79;--accent2:#2f6fa8;--ok:#1f6f43;--okbg:#eaf5ee;
+ --warn:#8a5a00;--warnbg:#fdf4e3;--stop:#9c2b2b;--stopbg:#fdecec;
+ --info:#1f4e63;--infobg:#eaf2f7;--radius:9px;
+}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+a{color:var(--accent2)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 64px}
+header.site{background:linear-gradient(160deg,#17364f,#1f4e79);color:#fff;padding:26px 0 22px;margin-bottom:0}
+header.site .wrap{padding-bottom:0}
+header.site h1{margin:0 0 4px;font-size:1.32rem;line-height:1.3;font-weight:650;letter-spacing:.2px}
+header.site p.sub{margin:0;color:#c8dced;font-size:.9rem}
+header.site p.byline{margin:8px 0 0;color:#9fc0da;font-size:.8rem}
+.band{font-size:.78rem;padding:9px 0;text-align:center;font-weight:600;letter-spacing:.3px}
+.band.red{background:var(--stopbg);color:var(--stop);border-bottom:1px solid #f0cccc}
+nav.tabs{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;
+ box-shadow:0 1px 4px rgba(20,40,70,.06)}
+nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;padding:0 16px}
+nav.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:13px 14px;
+ font:inherit;font-size:.86rem;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+nav.tabs button:hover{color:var(--accent)}
+nav.tabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+section.panel{display:none;padding-top:24px}
+section.panel.active{display:block}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+ padding:20px 22px;margin:0 0 18px;box-shadow:0 1px 3px rgba(20,40,70,.05)}
+.card h2{margin:0 0 6px;font-size:1.06rem;color:var(--accent)}
+.card h3{margin:20px 0 8px;font-size:.95rem;color:var(--accent)}
+.card p.lede{margin:0 0 14px;color:var(--muted);font-size:.9rem}
+.note{border-left:4px solid var(--info);background:var(--infobg);padding:11px 14px;border-radius:0 6px 6px 0;
+ font-size:.85rem;margin:14px 0}
+.note.warn{border-color:var(--warn);background:var(--warnbg)}
+.note.stop{border-color:var(--stop);background:var(--stopbg)}
+.note.ok{border-color:var(--ok);background:var(--okbg)}
+.note b{display:block;margin-bottom:3px}
+label.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:6px;cursor:pointer;
+ font-size:.89rem;border:1px solid transparent}
+label.chk:hover{background:#f2f5f9}
+label.chk input{margin-top:3px;flex:0 0 auto;width:16px;height:16px;accent-color:var(--accent)}
+label.chk.hit{background:var(--stopbg);border-color:#f0cccc}
+label.chk .t{flex:1}
+label.chk .t small{display:block;color:var(--muted);font-size:.79rem;margin-top:2px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:4px;font-size:.82rem}
+.field label{font-weight:600;color:var(--muted)}
+.field input,.field select,.field textarea{font:inherit;font-size:.88rem;padding:8px 10px;
+ border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);width:100%}
+.field input:focus,.field select:focus{outline:2px solid #bcd6ec;border-color:var(--accent2)}
+.btn{font:inherit;font-size:.86rem;font-weight:600;padding:9px 16px;border-radius:6px;cursor:pointer;
+ border:1px solid var(--accent);background:var(--accent);color:#fff}
+.btn:hover{background:var(--accent2)}
+.btn.sec{background:#fff;color:var(--accent)}
+.btn.sec:hover{background:#eef3f8}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+table{width:100%;border-collapse:collapse;font-size:.82rem;margin:10px 0}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eef3f8;color:var(--accent);font-weight:650;font-size:.76rem;text-transform:uppercase;letter-spacing:.4px}
+tr:hover td{background:#f8fafc}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.71rem;font-weight:650;white-space:nowrap}
+.pill.no{background:var(--stopbg);color:var(--stop)}
+.pill.yes{background:var(--okbg);color:var(--ok)}
+.pill.mid{background:var(--warnbg);color:var(--warn)}
+.pill.info{background:var(--infobg);color:var(--info)}
+.result{border-radius:var(--radius);padding:16px 18px;margin-top:16px;border:1px solid}
+.result.stop{background:var(--stopbg);border-color:#eec3c3}
+.result.caution{background:var(--warnbg);border-color:#eddcb6}
+.result.proceed{background:var(--okbg);border-color:#c3e2ce}
+.result h3{margin:0 0 8px;font-size:1rem}
+.result ul{margin:8px 0 0;padding-left:20px;font-size:.87rem}
+.result li{margin-bottom:5px}
+.big{font-size:1.7rem;font-weight:700;color:var(--accent);line-height:1.1}
+.metric{background:#eef3f8;border:1px solid #d5e2ee;border-radius:8px;padding:12px 14px}
+.metric .lab{font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:650}
+.filters{display:flex;gap:9px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.filters .field{min-width:140px;flex:1 1 140px}
+footer.site{border-top:1px solid var(--line);margin-top:30px;padding:20px 0 0;color:var(--muted);font-size:.8rem}
+footer.site p{margin:0 0 7px}
+details.terms{margin-top:14px;border:1px solid var(--line);border-radius:8px;background:#fbfcfd}
+details.terms summary{cursor:pointer;padding:11px 14px;font-weight:650;font-size:.86rem;color:var(--accent)}
+details.terms .body{padding:0 16px 14px;font-size:.82rem}
+details.terms ol{padding-left:20px;margin:0}
+details.terms li{margin-bottom:9px}
+details.terms li b{display:block}
+#gate{position:fixed;inset:0;background:rgba(14,28,44,.93);z-index:100;display:flex;
+ align-items:center;justify-content:center;padding:18px;overflow-y:auto}
+#gate .box{background:#fff;border-radius:12px;max-width:660px;width:100%;padding:26px 26px 22px;
+ max-height:92vh;overflow-y:auto;box-shadow:0 18px 50px rgba(0,0,0,.4)}
+#gate h2{margin:0 0 4px;font-size:1.14rem;color:var(--accent)}
+#gate p{font-size:.87rem;margin:0 0 11px}
+#gate ul{font-size:.86rem;padding-left:20px;margin:0 0 12px}
+#gate li{margin-bottom:6px}
+.gatechk{display:flex;gap:10px;align-items:flex-start;background:#eef3f8;border:1px solid #d5e2ee;
+ border-radius:8px;padding:13px;font-size:.87rem;font-weight:600;margin:12px 0}
+.gatechk input{margin-top:2px;width:17px;height:17px;accent-color:var(--accent)}
+.print-only{display:none}
+@media print{
+ body{background:#fff;font-size:11pt}
+ nav.tabs,.btnrow,#gate,.noprint{display:none!important}
+ section.panel{display:none!important}
+ section.panel.active{display:block!important}
+ .card{box-shadow:none;border:1px solid #bbb;page-break-inside:avoid}
+ .print-only{display:block!important}
+ header.site{background:none;color:#000;border-bottom:2px solid #000}
+ header.site p.sub,header.site p.byline{color:#333}
+ a{color:#000;text-decoration:none}
+}
+@media (max-width:640px){
+ .card{padding:16px 15px}
+ header.site h1{font-size:1.1rem}
+}
+</style>
+</head>
+<body>
+
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gt">
+ <div class="box">
+  <h2 id="gt">Before you continue</h2>
+  <p>This is an educational aid for <b>licensed healthcare professionals</b>. Please read and accept the terms below.</p>
+  <ul>
+   <li>It is <b>not medical advice</b> and <b>not a medical device</b>. It produces <b>no clinical recommendation</b>.</li>
+   <li>Platelet-rich plasma is <b>not approved or cleared for treating osteoarthritis</b> by the FDA or any comparable authority known to the author.</li>
+   <li>Nothing here states or implies that platelet-rich plasma <b>regenerates cartilage, reverses osteoarthritis, or prevents joint replacement</b>. No such effect has been demonstrated in humans.</li>
+   <li>The evidence is <b>contested</b>. The largest and best-blinded randomised trial found no difference from saline.</li>
+   <li>It <b>stores and transmits nothing</b>. Do not enter identifiable patient information.</li>
+   <li>Content is current only to <b>21 August 2026</b> and must be independently re-verified.</li>
+  </ul>
+  <details class="terms"><summary>Read the full terms of use (15 clauses)</summary>
+   <div class="body"><ol><li><b>Not medical advice</b>This tool is an educational aid for licensed healthcare professionals. It does not provide medical advice, does not diagnose or treat any condition, and does not create a clinician–patient relationship. It must never be used as the sole basis for any clinical decision.</li>
+<li><b>Personal views only — no employer, institutional, or organisational endorsement</b>This tool was prepared independently by the author, outside the scope of any employment, consultancy, or contractual engagement, using only publicly available information. It does not represent, and must not be attributed to, the opinions, positions, or policies of any current or former employer, client, institution, university, hospital, professional society, standards body, or regulatory authority. No confidential or proprietary information was used. No endorsement by any such entity is stated or implied.</li>
+<li><b>Not a medical device</b>This tool is not a medical device and is not clinical decision-support software. It has not been cleared, approved, registered, or certified by any regulatory authority. It performs no diagnosis, generates no treatment recommendation, and produces no output intended to direct clinical management.</li>
+<li><b>No recommendation is produced</b>Every screen in this tool organises information for structured thinking. Nothing it displays constitutes a recommendation for or against treating any individual patient. All clinical judgement remains with the treating clinician.</li>
+<li><b>Platelet-rich plasma is not approved for osteoarthritis</b>Platelet-rich plasma is not approved or cleared for the treatment of osteoarthritis of any joint by the United States Food and Drug Administration or by any comparable authority known to the author. Where preparation devices carry regulatory clearances, those clearances are for preparing the product and for indications other than intra-articular treatment of osteoarthritis.</li>
+<li><b>No claim of cartilage regeneration or disease modification</b>No content in this tool should be read as stating or implying that platelet-rich plasma regenerates cartilage, restores joint structure, reverses osteoarthritis, modifies the structural course of the disease, or prevents or avoids joint replacement. No such effect has been demonstrated in humans.</li>
+<li><b>Evidence is contested and time-limited</b>The evidence summarised here is mixed. The largest and best-blinded randomised trial in knee osteoarthritis found no difference from saline. Professional bodies disagree materially. All content is current only to the evidence cut-off of 21 August 2026 and must be independently re-verified before it is relied upon.</li>
+<li><b>Thresholds and values are illustrative</b>Any dose threshold, minimal clinically important difference, response threshold, or interval displayed is drawn from published literature for reference only. None is a standard of care. Users must select thresholds appropriate to their own population and state them in advance.</li>
+<li><b>Jurisdictional variation</b>Regulatory status, coverage, scope-of-practice rules, consent requirements, and professional obligations differ materially between jurisdictions and change over time. Nothing here is legal advice. Obtain jurisdiction-specific legal and regulatory advice before establishing, marketing, or billing for a platelet-rich plasma service.</li>
+<li><b>Product neutrality</b>Any named preparation system, device, or product appears only to describe published studies or regulatory records accurately. Naming is descriptive, not an endorsement, comparison, or recommendation. The author has no financial interest in any platelet-rich plasma preparation system, device, or service.</li>
+<li><b>No data collection, transmission, or storage</b>This tool runs entirely in your browser. It contains no analytics, no tracking, no cookies, and no network requests. Nothing you enter is stored, saved, or transmitted anywhere. Closing or reloading the page discards everything. Do not enter identifiable patient information.</li>
+<li><b>Accuracy and completeness</b>Reasonable care has been taken, but no representation or warranty, express or implied, is made as to accuracy, completeness, currency, or fitness for any purpose. Errors may be present. Please report any error to abdu94@gmail.com.</li>
+<li><b>Limitation of liability</b>To the fullest extent permitted by law, the author and publisher disclaim all liability for any loss, injury, or damage, direct or consequential, arising from any use of or reliance on this tool.</li>
+<li><b>User responsibility</b>The user is solely responsible for all clinical decisions and for compliance with all applicable laws, regulations, professional standards, scope-of-practice rules, institutional policies, and informed-consent requirements.</li>
+<li><b>Acceptance</b>By continuing you confirm that you are a licensed healthcare professional, that you have read and accepted these terms, and that you will use this tool only as an educational aid alongside independent clinical judgement.</li></ol></div></details>
+  <label class="gatechk"><input type="checkbox" id="gateAgree">
+   <span>I am a licensed healthcare professional. I have read and accept the terms of use, and I understand that this tool provides no clinical recommendation and that platelet-rich plasma is not approved for osteoarthritis.</span></label>
+  <div class="btnrow"><button class="btn" id="gateBtn" disabled>Enter the tool</button></div>
+ </div>
+</div>
+
+<div class="band red print-only">NOT MEDICAL ADVICE &nbsp;&middot;&nbsp; NOT A MEDICAL DEVICE &nbsp;&middot;&nbsp; NO CLINICAL RECOMMENDATION IS PRODUCED &nbsp;&middot;&nbsp; PRP IS NOT APPROVED FOR OSTEOARTHRITIS</div>
+
+<header class="site">
+ <div class="wrap">
+  <h1>Platelet-Rich Plasma for Degenerative Osteoarthritis</h1>
+  <p class="sub">Clinical Companion Tool &nbsp;&middot;&nbsp; candidacy &nbsp;&middot;&nbsp; product characterisation &nbsp;&middot;&nbsp; evidence &nbsp;&middot;&nbsp; outcomes</p>
+  <p class="byline">Dr. Hafez Selim, MD, PhD &nbsp;&middot;&nbsp; Selim Medical Press &nbsp;&middot;&nbsp; evidence cut-off 21 August 2026</p>
+ </div>
+</header>
+
+<div class="band red noprint">Educational aid for licensed healthcare professionals. Not medical advice. Not a medical device. No recommendation is produced. PRP is not approved for osteoarthritis.</div>
+
+<nav class="tabs noprint" role="tablist"><div class="wrap">
+ <button role="tab" data-p="screen" aria-selected="true">1 &middot; Candidacy screener</button>
+ <button role="tab" data-p="product" aria-selected="false">2 &middot; Product &amp; dose</button>
+ <button role="tab" data-p="evidence" aria-selected="false">3 &middot; Evidence explorer</button>
+ <button role="tab" data-p="outcome" aria-selected="false">4 &middot; Outcome tracker</button>
+ <button role="tab" data-p="about" aria-selected="false">About &amp; terms</button>
+</div></nav>
+
+<div class="wrap">
+
+<!-- ============ 1. SCREENER ============ -->
+<section class="panel active" id="p-screen">
+ <div class="card">
+  <h2>Candidacy screener</h2>
+  <p class="lede">Works through the selection sequence in eight steps. It organises information; it does not decide. Every item requires clinical judgement, and the output is a structured summary, not a recommendation.</p>
+
+  <h3>Step 1 &middot; Absolute stop conditions</h3>
+  <div class="note stop"><b>If any item is present, do not inject.</b>Address the condition first and re-screen.</div>
+  <div id="stopBox"><label class="chk" data-g="stop"><input type="checkbox" data-g="stop" data-i="0"><span class="t">Suspected or confirmed septic arthritis in the target joint<small>Injecting an infected joint is unequivocally harmful.</small></span></label><label class="chk" data-g="stop"><input type="checkbox" data-g="stop" data-i="1"><span class="t">Cellulitis, broken skin, or active dermatosis over the intended entry site<small>Provides a direct route for joint inoculation.</small></span></label><label class="chk" data-g="stop"><input type="checkbox" data-g="stop" data-i="2"><span class="t">Bacteraemia or systemic sepsis<small>Contraindicates elective intra-articular injection.</small></span></label><label class="chk" data-g="stop"><input type="checkbox" data-g="stop" data-i="3"><span class="t">Patient expects cartilage regeneration, disease reversal, or guaranteed avoidance of surgery — and this has not been corrected<small>Not a physiological exclusion but a consent failure. The treatment will fail against the patient's own standard whatever it does to their symptoms.</small></span></label><label class="chk" data-g="stop"><input type="checkbox" data-g="stop" data-i="4"><span class="t">Platelet count too low to produce a meaningful concentrate<small>Verify the threshold locally; commonly below approximately 100 × 10⁹/L.</small></span></label><label class="chk" data-g="stop"><input type="checkbox" data-g="stop" data-i="5"><span class="t">The pain generator is unconfirmed and an alternative source is more likely<small>Injecting the wrong structure produces a non-response that will be attributed to the treatment.</small></span></label></div>
+
+  <h3>Step 2 &middot; Joint and stage</h3>
+  <div class="grid2">
+   <div class="field"><label for="jSel">Target joint</label>
+    <select id="jSel"><option value="knee">Knee</option><option value="hip">Hip</option><option value="thumb">Thumb base (1st CMC)</option><option value="ankle">Ankle (tibiotalar)</option><option value="subtalar">Subtalar / midfoot</option><option value="shoulder">Glenohumeral</option><option value="acj">Acromioclavicular / other</option></select></div>
+   <div class="field"><label for="klSel">Radiographic stage</label>
+    <select id="klSel">
+     <option value="">Not recorded</option>
+     <option value="0">KL 0 / equivalent</option><option value="1">KL 1 / equivalent</option>
+     <option value="2">KL 2 / equivalent</option><option value="3">KL 3 / equivalent</option>
+     <option value="4">KL 4 / end-stage</option></select></div>
+   <div class="field"><label for="ageIn">Age (years)</label><input id="ageIn" type="number" min="16" max="110" placeholder="e.g. 58"></div>
+   <div class="field"><label for="symIn">Symptom duration (months)</label><input id="symIn" type="number" min="0" placeholder="e.g. 18"></div>
+  </div>
+  <div id="jointNote" class="note" style="display:none"></div>
+
+  <h3>Step 3 &middot; Adequacy of core treatment</h3>
+  <div class="note warn"><b>Sequencing is not optional.</b>Both ESSKA consensus documents and the AAPM&amp;R guidance restrict any favourable position to patients who remain symptomatic <i>despite</i> conservative care. Exercise and weight management have larger effect sizes and lower cost than any injectable.</div>
+  <div id="coreBox"><label class="chk" data-g="core"><input type="checkbox" data-g="core" data-i="0"><span class="t">Supervised exercise programme completed<small>Record sessions, content, whether quadriceps-focused, and adherence. ‘Failed physiotherapy’ is not adequate documentation.</small></span></label><label class="chk" data-g="core"><input type="checkbox" data-g="core" data-i="1"><span class="t">Weight management addressed where body mass index is elevated<small>Reduction beyond 5–8% produces clinically important functional improvement.</small></span></label><label class="chk" data-g="core"><input type="checkbox" data-g="core" data-i="2"><span class="t">Adequate analgesic trial including the topical route<small>Topical diclofenac has a high probability of exceeding the MCID with essentially no systemic adverse-event signal.</small></span></label><label class="chk" data-g="core"><input type="checkbox" data-g="core" data-i="3"><span class="t">Activity modification, bracing, gait aid, or orthosis considered</span></label><label class="chk" data-g="core"><input type="checkbox" data-g="core" data-i="4"><span class="t">Corticosteroid injection considered and discussed<small>Cheap and covered; benefit largely gone by 3–6 months.</small></span></label></div>
+
+  <h3>Step 4 &middot; Pain phenotype</h3>
+  <p class="lede">Tick features that are present. A patient with several is unlikely to benefit from a joint-directed injection regardless of structural stage.</p>
+  <div id="phenoBox"><label class="chk" data-g="pheno"><input type="checkbox" data-g="pheno" data-i="0"><span class="t">Pain at rest</span></label><label class="chk" data-g="pheno"><input type="checkbox" data-g="pheno" data-i="1"><span class="t">Pain at night</span></label><label class="chk" data-g="pheno"><input type="checkbox" data-g="pheno" data-i="2"><span class="t">Burning, shooting, or electric quality</span></label><label class="chk" data-g="pheno"><input type="checkbox" data-g="pheno" data-i="3"><span class="t">Allodynia or hyperalgesia around the joint</span></label><label class="chk" data-g="pheno"><input type="checkbox" data-g="pheno" data-i="4"><span class="t">Widespread pain at other sites</span></label><label class="chk" data-g="pheno"><input type="checkbox" data-g="pheno" data-i="5"><span class="t">Neuropathic screening score elevated (e.g. painDETECT ≥ 13)</span></label><label class="chk" data-g="pheno"><input type="checkbox" data-g="pheno" data-i="6"><span class="t">Significant sleep disturbance, low mood, or catastrophising</span></label></div>
+
+  <h3>Step 5 &middot; Relative and precautionary exclusions</h3>
+  <div id="relBox"><label class="chk" data-g="rel"><input type="checkbox" data-g="rel" data-i="0"><span class="t">Thrombocytopenia<small>Relative to absolute, depending on degree</small></span></label><label class="chk" data-g="rel"><input type="checkbox" data-g="rel" data-i="1"><span class="t">Inherited or acquired platelet function disorder<small>Relative — the product may be quantitatively adequate and functionally inert</small></span></label><label class="chk" data-g="rel"><input type="checkbox" data-g="rel" data-i="2"><span class="t">Bleeding disorder or coagulopathy<small>Relative — note the haemophilic arthropathy trial found no benefit over placebo</small></span></label><label class="chk" data-g="rel"><input type="checkbox" data-g="rel" data-i="3"><span class="t">Therapeutic anticoagulation<small>Relative — do NOT interrupt for this indication</small></span></label><label class="chk" data-g="rel"><input type="checkbox" data-g="rel" data-i="4"><span class="t">Antiplatelet therapy for a vascular indication<small>Relative — do NOT interrupt for this indication</small></span></label><label class="chk" data-g="rel"><input type="checkbox" data-g="rel" data-i="5"><span class="t">Active malignancy<small>PRECAUTIONARY ONLY — mechanistic, no evidence of harm. Describe it to the patient as theoretical.</small></span></label><label class="chk" data-g="rel"><input type="checkbox" data-g="rel" data-i="6"><span class="t">Pregnancy or breastfeeding<small>PRECAUTIONARY ONLY — absence of data rather than evidence of harm</small></span></label><label class="chk" data-g="rel"><input type="checkbox" data-g="rel" data-i="7"><span class="t">Haemodynamically significant anaemia<small>Relative — blood draw volume is not trivial</small></span></label><label class="chk" data-g="rel"><input type="checkbox" data-g="rel" data-i="8"><span class="t">Active systemic inflammatory arthritis<small>Relative — different disease</small></span></label><label class="chk" data-g="rel"><input type="checkbox" data-g="rel" data-i="9"><span class="t">End-stage structural degeneration (KL 4 or equivalent)<small>Relative — low probability of benefit; opportunity cost of deferring definitive management</small></span></label><label class="chk" data-g="rel"><input type="checkbox" data-g="rel" data-i="10"><span class="t">Immunosuppression<small>Relative — heightened infection vigilance</small></span></label><label class="chk" data-g="rel"><input type="checkbox" data-g="rel" data-i="11"><span class="t">Poorly controlled diabetes<small>Relative — infection risk</small></span></label></div>
+
+  <h3>Step 6 &middot; Consent and disclosure</h3>
+  <p class="lede">All eight must be covered and recorded.</p>
+  <div id="conBox"><label class="chk" data-g="con"><input type="checkbox" data-g="con" data-i="0"><span class="t">Not approved or cleared for osteoarthritis; device clearance is not treatment approval</span></label><label class="chk" data-g="con"><input type="checkbox" data-g="con" data-i="1"><span class="t">The evidence stated accurately for THIS joint, including the negative trials</span></label><label class="chk" data-g="con"><input type="checkbox" data-g="con" data-i="2"><span class="t">No cartilage regeneration, no structural benefit, no demonstrated avoidance of surgery</span></label><label class="chk" data-g="con"><input type="checkbox" data-g="con" data-i="3"><span class="t">Expected time course: delayed onset, peak 3–6 months, finite duration</span></label><label class="chk" data-g="con"><input type="checkbox" data-g="con" data-i="4"><span class="t">Probability of non-response</span></label><label class="chk" data-g="con"><input type="checkbox" data-g="con" data-i="5"><span class="t">Cost, and the absence of insurance coverage</span></label><label class="chk" data-g="con"><input type="checkbox" data-g="con" data-i="6"><span class="t">Alternatives, including cheaper ones with better evidence</span></label><label class="chk" data-g="con"><input type="checkbox" data-g="con" data-i="7"><span class="t">The stopping rule, stated numerically and agreed in advance</span></label></div>
+
+  <h3>Step 7 &middot; Practice readiness</h3>
+  <div id="prepBox"><label class="chk" data-g="prep"><input type="checkbox" data-g="prep" data-i="0"><span class="t">Preparation system validated; typical delivered platelet dose known</span></label><label class="chk" data-g="prep"><input type="checkbox" data-g="prep" data-i="1"><span class="t">Documentation set in place for every injection</span></label><label class="chk" data-g="prep"><input type="checkbox" data-g="prep" data-i="2"><span class="t">Image guidance available and appropriate for this joint</span></label><label class="chk" data-g="prep"><input type="checkbox" data-g="prep" data-i="3"><span class="t">Baseline outcome scores recorded</span></label><label class="chk" data-g="prep"><input type="checkbox" data-g="prep" data-i="4"><span class="t">Response threshold and stopping rule declared in the record</span></label><label class="chk" data-g="prep"><input type="checkbox" data-g="prep" data-i="5"><span class="t">Written safety-netting instructions prepared</span></label><label class="chk" data-g="prep"><input type="checkbox" data-g="prep" data-i="6"><span class="t">Out-of-hours pathway defined and communicated</span></label><label class="chk" data-g="prep"><input type="checkbox" data-g="prep" data-i="7"><span class="t">Adverse-event capture including a 48–72 hour contact</span></label><label class="chk" data-g="prep"><input type="checkbox" data-g="prep" data-i="8"><span class="t">Rehabilitation programme prescribed to accompany the course</span></label></div>
+
+  <div class="btnrow noprint">
+   <button class="btn" id="runScreen">Generate summary</button>
+   <button class="btn sec" id="resetScreen">Reset</button>
+   <button class="btn sec" id="printScreen">Print summary</button>
+  </div>
+  <div id="screenOut"></div>
+ </div>
+</section>
+
+<!-- ============ 2. PRODUCT ============ -->
+<section class="panel" id="p-product">
+ <div class="card">
+  <h2>Product characterisation and dose calculation</h2>
+  <p class="lede">The absolute platelet dose is the compositional descriptor most closely corresponding to what the joint receives, and it is the one least often recorded. In one survey of practising physicians, complete blood counts were not ordered in 93.3% of cases &mdash; meaning the dose was unknown.</p>
+
+  <div class="grid2">
+   <div class="field"><label for="pBase">Baseline platelet count (&times;10<sup>9</sup>/L)</label><input id="pBase" type="number" min="0" step="1" placeholder="e.g. 240"></div>
+   <div class="field"><label for="pProd">Product platelet concentration (&times;10<sup>9</sup>/L)</label><input id="pProd" type="number" min="0" step="1" placeholder="e.g. 1200"></div>
+   <div class="field"><label for="pVol">Injected volume (mL)</label><input id="pVol" type="number" min="0" step="0.1" placeholder="e.g. 5"></div>
+   <div class="field"><label for="pWbc">Product leukocyte concentration (&times;10<sup>9</sup>/L)</label><input id="pWbc" type="number" min="0" step="0.1" placeholder="optional"></div>
+   <div class="field"><label for="pWbcBase">Baseline leukocyte count (&times;10<sup>9</sup>/L)</label><input id="pWbcBase" type="number" min="0" step="0.1" placeholder="optional"></div>
+   <div class="field"><label for="pJoint">Joint</label>
+    <select id="pJoint">
+     <option value="knee|3|8">Knee (3&ndash;8 mL)</option><option value="hip|3|5">Hip (3&ndash;5 mL)</option>
+     <option value="thumb|0.5|1">Thumb base (0.5&ndash;1 mL)</option><option value="ankle|2|4">Tibiotalar (2&ndash;4 mL)</option>
+     <option value="subtalar|1|2">Subtalar (1&ndash;2 mL)</option><option value="gh|4|6">Glenohumeral (4&ndash;6 mL)</option>
+     <option value="acj|0.1|0.5">Acromioclavicular (&le;0.5 mL)</option></select></div>
+  </div>
+
+  <div class="grid2" style="margin-top:16px">
+   <div class="metric"><div class="lab">Enrichment factor</div><div class="big" id="mEnrich">&mdash;</div></div>
+   <div class="metric"><div class="lab">Absolute platelet dose</div><div class="big" id="mDose">&mdash;</div></div>
+   <div class="metric"><div class="lab">vs proposed 10&times;10<sup>9</sup> threshold</div><div class="big" id="mPct">&mdash;</div></div>
+   <div class="metric"><div class="lab">Leukocyte classification</div><div class="big" id="mWbc" style="font-size:1.05rem">&mdash;</div></div>
+  </div>
+  <div id="prodNote"></div>
+
+  <div class="note"><b>How the dose is calculated</b>Absolute platelet dose (&times;10<sup>9</sup>) = product concentration (&times;10<sup>9</sup>/L) &times; injected volume (mL) &divide; 1000. The 10&times;10<sup>9</sup> reference is a hypothesis proposed in the dose literature, not an established standard; at least one characterised cohort found non-responders receiving a <i>higher</i> dose than responders. Use the calculation to know what you are delivering, not to assume that more is better.</div>
+
+  <h3>Documentation record</h3>
+  <p class="lede">The fourteen fields that make a subsequent non-response interpretable. Nothing entered here is stored or transmitted; use <b>Print record</b> to produce a paper copy for the notes.</p>
+  <div class="grid2">
+   <div class="field"><label>Preparation system / lot</label><input id="dSys" placeholder="system, manufacturer, lot"></div>
+   <div class="field"><label>Anticoagulant and ratio</label><input id="dAc" placeholder="e.g. ACD-A 1:9"></div>
+   <div class="field"><label>Spins</label><select id="dSpin"><option>Single</option><option>Double</option></select></div>
+   <div class="field"><label>Spin 1: RCF (g) &times; duration</label><input id="dS1" placeholder="e.g. 1500 g &times; 5 min"></div>
+   <div class="field"><label>Spin 2: RCF (g) &times; duration</label><input id="dS2" placeholder="if applicable"></div>
+   <div class="field"><label>Buffy coat included?</label><select id="dBuffy"><option>No — leukocyte-poor</option><option>Yes — leukocyte-rich</option></select></div>
+   <div class="field"><label>Erythrocyte contamination</label><select id="dRbc"><option>None</option><option>Trace</option><option>Visible</option></select></div>
+   <div class="field"><label>Activation</label><select id="dAct"><option>None</option><option>Calcium chloride</option><option>Autologous thrombin</option><option>Other</option></select></div>
+   <div class="field"><label>Injection number in course</label><input id="dNum" placeholder="e.g. 2 of 3"></div>
+   <div class="field"><label>Interval since previous (days)</label><input id="dInt" type="number" min="0"></div>
+   <div class="field"><label>Time draw to injection (min)</label><input id="dTime" type="number" min="0"></div>
+   <div class="field"><label>Image guidance</label><select id="dGuide"><option>Ultrasound</option><option>Fluoroscopy</option><option>None</option></select></div>
+   <div class="field"><label>Intra-articular placement confirmed?</label><select id="dConf"><option>Yes — image saved</option><option>Yes — not saved</option><option>No</option></select></div>
+   <div class="field"><label>Effusion aspirated (mL)</label><input id="dAsp" placeholder="0 if none"></div>
+  </div>
+  <div class="btnrow noprint">
+   <button class="btn sec" id="printProd">Print record</button>
+   <button class="btn sec" id="resetProd">Reset</button>
+  </div>
+  <div id="prodWarn"></div>
+ </div>
+</section>
+
+<!-- ============ 3. EVIDENCE ============ -->
+<section class="panel" id="p-evidence">
+ <div class="card">
+  <h2>Evidence explorer</h2>
+  <p class="lede">Every entry is a real, verified PubMed record. Filter by joint, study type, comparator, or direction of finding. <b>Direction</b> describes what the study reported, not an endorsement.</p>
+  <div class="note warn"><b>Read the comparator column.</b>Superiority over hyaluronic acid is a weak claim, because hyaluronic acid performs close to placebo in large blinded trials. Intra-articular saline is not inert either: it exceeds the minimal clinically important difference for WOMAC at six months. The strongest designs are those blinding participant, injector and assessor against a placebo control.</div>
+  <div class="filters noprint">
+   <div class="field"><label for="fJoint">Joint</label><select id="fJoint"></select></div>
+   <div class="field"><label for="fType">Study type</label><select id="fType"></select></div>
+   <div class="field"><label for="fDir">Direction</label><select id="fDir"></select></div>
+   <div class="field" style="flex:2 1 200px"><label for="fText">Search</label><input id="fText" placeholder="author, trial name, keyword…"></div>
+   <button class="btn sec" id="fReset" style="margin-bottom:1px">Clear</button>
+  </div>
+  <p style="font-size:.82rem;color:var(--muted)" id="evCount"></p>
+  <div class="scroll"><table id="evTable">
+   <thead><tr><th>Study</th><th>Joint</th><th>Type</th><th>Comparator</th><th>Blinding</th><th>Direction</th></tr></thead>
+   <tbody id="evBody"></tbody></table></div>
+ </div>
+</section>
+
+<!-- ============ 4. OUTCOME ============ -->
+<section class="panel" id="p-outcome">
+ <div class="card">
+  <h2>Outcome tracker</h2>
+  <p class="lede">Declare the threshold before treatment, apply it afterwards. A threshold chosen after the result is known is not a threshold.</p>
+  <div class="note warn"><b>There is no single MCID.</b>Values differ by derivation method, population, baseline severity, and timepoint &mdash; the trials cited in the accompanying book use values from 1.6 to 3.94 on the WOMAC Likert pain subscale alone. Choose one, record its source, and apply it consistently.</div>
+
+  <h3>Declared in advance</h3>
+  <div class="grid2">
+   <div class="field"><label for="oInst">Instrument and threshold</label><select id="oInst"></select></div>
+   <div class="field"><label for="oThr">Threshold (points of improvement)</label><input id="oThr" type="number" step="0.1"></div>
+   <div class="field"><label for="oSrc">Source of the threshold</label><input id="oSrc" placeholder="state it in the record"></div>
+   <div class="field"><label for="oDir">Direction of the scale</label><select id="oDir">
+     <option value="lower">Lower is better (WOMAC, VAS, NRS)</option>
+     <option value="higher">Higher is better (KOOS, IKDC, HOOS)</option></select></div>
+  </div>
+
+  <h3>Scores</h3>
+  <div class="grid2">
+   <div class="field"><label for="sBase">Baseline</label><input id="sBase" type="number" step="0.1"></div>
+   <div class="field"><label for="s6w">6 weeks</label><input id="s6w" type="number" step="0.1"></div>
+   <div class="field"><label for="s3m">3 months (primary)</label><input id="s3m" type="number" step="0.1"></div>
+   <div class="field"><label for="s6m">6 months</label><input id="s6m" type="number" step="0.1"></div>
+   <div class="field"><label for="s12m">12 months</label><input id="s12m" type="number" step="0.1"></div>
+  </div>
+
+  <h3>Objective corroboration at the primary timepoint</h3>
+  <div id="corrBox"><label class="chk" data-g="corr"><input type="checkbox" data-g="corr" data-i="0"><span class="t">Analgesic use reduced (agents, doses, or days per week)</span></label><label class="chk" data-g="corr"><input type="checkbox" data-g="corr" data-i="1"><span class="t">Patient-nominated functional goal achieved</span></label><label class="chk" data-g="corr"><input type="checkbox" data-g="corr" data-i="2"><span class="t">Performance measure improved (e.g. 30-second sit-to-stand)</span></label><label class="chk" data-g="corr"><input type="checkbox" data-g="corr" data-i="3"><span class="t">Walking tolerance improved</span></label></div>
+  <div class="grid2" style="margin-top:10px">
+   <div class="field"><label for="passSel">Patient acceptable symptom state at 3 months</label>
+    <select id="passSel"><option value="">Not asked</option><option value="yes">Yes — current state is satisfactory</option><option value="no">No — not satisfactory</option></select></div>
+  </div>
+
+  <div class="btnrow noprint">
+   <button class="btn" id="runOut">Classify response</button>
+   <button class="btn sec" id="resetOut">Reset</button>
+   <button class="btn sec" id="printOut">Print</button>
+  </div>
+  <div id="outRes"></div>
+ </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="panel" id="p-about">
+ <div class="card">
+  <h2>About this tool</h2>
+  <p style="font-size:.9rem">This is the free companion to <i>Platelet-Rich Plasma for Degenerative Osteoarthritis: Evidence, Clinical Applications, Safety, and Treatment Protocols</i> by Dr. Hafez Selim, MD, PhD (Selim Medical Press). It implements the patient-selection framework, the documentation minimum, the evidence base, and the outcome-measurement discipline set out in that book.</p>
+  <p style="font-size:.9rem"><b>It runs entirely in your browser.</b> There is no analytics, no tracking, no cookie, and no network request. Nothing you type is stored or transmitted. Reloading the page discards everything. Do not enter identifiable patient information.</p>
+  <p style="font-size:.9rem"><b>Evidence cut-off: 21 August 2026.</b> Guideline positions, regulatory provisions, coverage determinations, and device clearances all change. Re-verify before relying on anything here.</p>
+  <p style="font-size:.9rem"><b>Corrections and error reports</b> are welcome and will be acted on: <a href="mailto:abdu94@gmail.com">abdu94@gmail.com</a>.</p>
+  <details class="terms" open><summary>Full terms of use (15 clauses)</summary>
+   <div class="body"><ol><li><b>Not medical advice</b>This tool is an educational aid for licensed healthcare professionals. It does not provide medical advice, does not diagnose or treat any condition, and does not create a clinician–patient relationship. It must never be used as the sole basis for any clinical decision.</li>
+<li><b>Personal views only — no employer, institutional, or organisational endorsement</b>This tool was prepared independently by the author, outside the scope of any employment, consultancy, or contractual engagement, using only publicly available information. It does not represent, and must not be attributed to, the opinions, positions, or policies of any current or former employer, client, institution, university, hospital, professional society, standards body, or regulatory authority. No confidential or proprietary information was used. No endorsement by any such entity is stated or implied.</li>
+<li><b>Not a medical device</b>This tool is not a medical device and is not clinical decision-support software. It has not been cleared, approved, registered, or certified by any regulatory authority. It performs no diagnosis, generates no treatment recommendation, and produces no output intended to direct clinical management.</li>
+<li><b>No recommendation is produced</b>Every screen in this tool organises information for structured thinking. Nothing it displays constitutes a recommendation for or against treating any individual patient. All clinical judgement remains with the treating clinician.</li>
+<li><b>Platelet-rich plasma is not approved for osteoarthritis</b>Platelet-rich plasma is not approved or cleared for the treatment of osteoarthritis of any joint by the United States Food and Drug Administration or by any comparable authority known to the author. Where preparation devices carry regulatory clearances, those clearances are for preparing the product and for indications other than intra-articular treatment of osteoarthritis.</li>
+<li><b>No claim of cartilage regeneration or disease modification</b>No content in this tool should be read as stating or implying that platelet-rich plasma regenerates cartilage, restores joint structure, reverses osteoarthritis, modifies the structural course of the disease, or prevents or avoids joint replacement. No such effect has been demonstrated in humans.</li>
+<li><b>Evidence is contested and time-limited</b>The evidence summarised here is mixed. The largest and best-blinded randomised trial in knee osteoarthritis found no difference from saline. Professional bodies disagree materially. All content is current only to the evidence cut-off of 21 August 2026 and must be independently re-verified before it is relied upon.</li>
+<li><b>Thresholds and values are illustrative</b>Any dose threshold, minimal clinically important difference, response threshold, or interval displayed is drawn from published literature for reference only. None is a standard of care. Users must select thresholds appropriate to their own population and state them in advance.</li>
+<li><b>Jurisdictional variation</b>Regulatory status, coverage, scope-of-practice rules, consent requirements, and professional obligations differ materially between jurisdictions and change over time. Nothing here is legal advice. Obtain jurisdiction-specific legal and regulatory advice before establishing, marketing, or billing for a platelet-rich plasma service.</li>
+<li><b>Product neutrality</b>Any named preparation system, device, or product appears only to describe published studies or regulatory records accurately. Naming is descriptive, not an endorsement, comparison, or recommendation. The author has no financial interest in any platelet-rich plasma preparation system, device, or service.</li>
+<li><b>No data collection, transmission, or storage</b>This tool runs entirely in your browser. It contains no analytics, no tracking, no cookies, and no network requests. Nothing you enter is stored, saved, or transmitted anywhere. Closing or reloading the page discards everything. Do not enter identifiable patient information.</li>
+<li><b>Accuracy and completeness</b>Reasonable care has been taken, but no representation or warranty, express or implied, is made as to accuracy, completeness, currency, or fitness for any purpose. Errors may be present. Please report any error to abdu94@gmail.com.</li>
+<li><b>Limitation of liability</b>To the fullest extent permitted by law, the author and publisher disclaim all liability for any loss, injury, or damage, direct or consequential, arising from any use of or reliance on this tool.</li>
+<li><b>User responsibility</b>The user is solely responsible for all clinical decisions and for compliance with all applicable laws, regulations, professional standards, scope-of-practice rules, institutional policies, and informed-consent requirements.</li>
+<li><b>Acceptance</b>By continuing you confirm that you are a licensed healthcare professional, that you have read and accepted these terms, and that you will use this tool only as an educational aid alongside independent clinical judgement.</li></ol></div></details>
+ </div>
+</section>
+
+<footer class="site">
+ <p><b>Platelet-Rich Plasma for Degenerative Osteoarthritis &mdash; Clinical Companion Tool.</b> &copy; 2026 Abdulhafez A. Selim. Published by Selim Medical Press.</p>
+ <p>Educational aid for licensed healthcare professionals. Not medical advice. Not a medical device. No clinical recommendation is produced. Platelet-rich plasma is not approved or cleared for the treatment of osteoarthritis by the FDA or any comparable authority known to the author.</p>
+ <p>The views expressed are the author's own and do not represent those of any current or former employer, client, institution, professional society, or regulatory authority.</p>
+ <p>Corrections: <a href="mailto:abdu94@gmail.com">abdu94@gmail.com</a> &nbsp;&middot;&nbsp; Evidence cut-off 21 August 2026</p>
+</footer>
+</div>
+
+<script>
+const EVIDENCE=[{"pmid":"34812863","cite":"Bennell KL, Paterson KL, Metcalf BR, Duong V, Eyles J, Kasza J, et al. Effect of Intra-articular Platelet-Rich Plasma vs Placebo Injection on Pain and Medial Tibial Cartilage Volume in Patients With Knee Osteoarthritis: The RESTORE Randomized Clinical Trial. JAMA. 2021;326(20):2021-2030.","doi":"10.1001/jama.2021.19415","year":"2021","joint":"Knee","type":"RCT","comparator":"Saline","blinding":"Full (participant, injector, assessor)","direction":"No benefit","note":"RESTORE. n=288, KL2-3, 3 weekly LP-PRP. Pain -2.1 vs -1.8 (diff -0.4, 95% CI -0.9 to 0.2, P=.17; MCID 1.8). Medial tibial cartilage volume -1.4% vs -1.2% (P=.81). 29/31 secondary outcomes null."},{"pmid":"35638203","cite":"Lewis E, Merghani K, Robertson I, Mulford J, Prentice B, Mathew R, et al. The effectiveness of leucocyte-poor platelet-rich plasma injections on symptomatic early osteoarthritis of the knee: the PEAK randomized controlled trial. Bone Joint J. 2022;104-B(6):663-671.","doi":"10.1302/0301-620X.104B6.BJJ-2021-1109.R2","year":"2022","joint":"Knee","type":"RCT","comparator":"Saline","blinding":"Double-blind","direction":"Mixed","note":"PEAK. Three arms: placebo, 1 PRP + 2 placebo, 3 PRP. 12-month follow-up."},{"pmid":"34560869","cite":"D\u00f3rio M, Pereira RMR, Luz AGB, Deveza LA, de Oliveira RM, Fuller R. Efficacy of platelet-rich plasma and plasma for symptomatic treatment of knee osteoarthritis: a double-blinded placebo-controlled randomized clinical trial. BMC Musculoskelet Disord. 2021;22(1):822.","doi":"10.1186/s12891-021-04706-7","year":"2021","joint":"Knee","type":"RCT","comparator":"Saline + non-enriched plasma","blinding":"Double-blind","direction":"Mixed","note":"Three-arm: PRP (n=20), plasma (n=21), saline (n=21). Two US-guided injections. Only trial with a non-enriched plasma arm."},{"pmid":"39097760","cite":"Yoshioka T, Arai N, Sugaya H, Taniguchi Y, Kanamori A, Gosho M, et al. The Effectiveness of Leukocyte-Poor Platelet-Rich Plasma Injections for Symptomatic Mild to Moderate Osteoarthritis of the Knee With Joint Effusion or Bone Marrow Lesions in a Japanese Population: A Randomized, Double-Blind, Placebo-Controlled Clinical Trial. Am J Sports Med. 2024;52(10):2493-2502.","doi":"10.1177/03635465241263073","year":"2024","joint":"Knee","type":"RCT","comparator":"Saline","blinding":"Double-blind","direction":"Favourable","note":"LP-PRP in Japanese patients selected for effusion or bone marrow lesions. n=30, 3 injections, 24 weeks."},{"pmid":"34705072","cite":"Yurtbay A, Say F, \u00c7inka H, Ersoy A. Multiple platelet-rich plasma injections are superior to single PRP injections or saline in osteoarthritis of the knee: the 2-year results of a randomized, double-blind, placebo-controlled clinical trial. Arch Orthop Trauma Surg. 2021;142(10):2755-2768.","doi":"10.1007/s00402-021-04230-2","year":"2021","joint":"Knee","type":"RCT","comparator":"Saline","blinding":"Double-blind","direction":"Favourable","note":"Four-arm: single PRP, single saline, 3 PRP, 3 saline. n=237, 24-month follow-up. Multiple injections superior."},{"pmid":"30611335","cite":"Lin KY, Yang CC, Hsu CJ, Yeh ML, Renn JH. Intra-articular Injection of Platelet-Rich Plasma Is Superior to Hyaluronic Acid or Saline Solution in the Treatment of Mild to Moderate Knee Osteoarthritis: A Randomized, Double-Blind, Triple-Parallel, Placebo-Controlled Clinical Trial. Arthroscopy. 2019;35(1):106-117.","doi":"10.1016/j.arthro.2018.06.035","year":"2019","joint":"Knee","type":"RCT","comparator":"Saline and HA","blinding":"Double-blind","direction":"Favourable","note":"87 knees, 3 weekly LP-PRP vs HA vs saline. All improved at 1 month; only PRP maintained at 12 months."},{"pmid":"31127755","cite":"Elik H, Do\u011fu B, Y\u0131lmaz F, Bego\u011flu FA, Kuran B. The efficiency of platelet-rich plasma treatment in patients with knee osteoarthritis. J Back Musculoskelet Rehabil. 2020;33(1):127-138.","doi":"10.3233/BMR-181374","year":"2020","joint":"Knee","type":"RCT","comparator":"Saline","blinding":"Randomised","direction":"Favourable","note":"n=60. 3 PRP injections vs single saline. Ultrasonographic cartilage thickness measured."},{"pmid":"29210705","cite":"Wu YT, Hsu KC, Li TY, Chang CK, Chen LC. Effects of Platelet-Rich Plasma on Pain and Muscle Strength in Patients With Knee Osteoarthritis. Am J Phys Med Rehabil. 2018;97(4):248-254.","doi":"10.1097/PHM.0000000000000874","year":"2018","joint":"Knee","type":"RCT","comparator":"Saline (contralateral knee)","blinding":"Randomised","direction":"Mixed","note":"Within-patient design: PRP one knee, saline the other, same patient. n=20 patients, 40 knees."},{"pmid":"35638918","cite":"Duan W, Su X, Yu Z, Jiang M, Zhao L, Giannoudis PV, et al. No Benefit to Platelet-rich Plasma Over Placebo Injections in Terms of Pain or Function in Patients with Hemophilic Knee Arthritis: A Randomized Trial. Clin Orthop Relat Res. 2022;480(12):2361-2370.","doi":"10.1097/CORR.0000000000002264","year":"2022","joint":"Knee (haemophilic)","type":"RCT","comparator":"Placebo","blinding":"Double-blind","direction":"No benefit","note":"Haemophilic knee arthropathy. No benefit on WOMAC, VAS, HJHS or SF-36 through 24 months."},{"pmid":"41303112","cite":"S\u00e1nchez Santiuste M, Vaquerizo Garc\u00eda V, Pareja Esteban JA, Prado R, Padilla S, Anitua E. Plasma Rich in Growth Factors (PRGF) Versus Saline Intraosseous Infiltrations Combined with Intra-Articular PRGF in Severe Knee Osteoarthritis: A Prospective Double-Blind Multicentric Randomized Controlled Trial with 1-Year Follow-Up. J Clin Med. 2025;14(22).","doi":"10.3390/jcm14228075","year":"2025","joint":"Knee (severe)","type":"RCT","comparator":"Intraosseous saline","blinding":"Double-blind, multicentre","direction":"Under evaluation","note":"KL III-IV. Intraosseous PRGF vs intraosseous saline; both arms then 3 intra-articular PRGF. n=86, 1 year."},{"pmid":"41593810","cite":"Jahani P, Angoorani H, Moezy A, Fazlinejad M, Mazaherinezhad A. A comparative study of the efficacy of single and double centrifuged platelet-rich plasma and placebo (normal saline injection) on pain, ROM, and physical function of patients with knee osteoarthritis: a double-blinded controlled randomized trial with a six-month follow-up. Adv Rheumatol. 2026;66(1):15.","doi":"10.1186/s42358-026-00518-2","year":"2026","joint":"Knee","type":"RCT","comparator":"Saline","blinding":"Double-blind","direction":"Mixed","note":"Single vs double centrifuged PRP vs saline. 6-month follow-up."},{"pmid":"40291970","cite":"Saraf A, Hussain A, Mahipal V, Agarwal T, Kush A. The Multiple Dosing Effects of Platelet-Rich Plasma on Cartilage Regeneration in Knee Osteoarthritis: Randomised, Placebo-Controlled Trial. Malays Orthop J. 2025;19(1):11-20.","doi":"10.5704/MOJ.2503.003","year":"2025","joint":"Knee","type":"RCT","comparator":"Placebo","blinding":"Randomised","direction":"Mixed","note":"Multiple dosing and cartilage outcomes."},{"pmid":"35103547","cite":"Di Martino A, Boffa A, Andriolo L, Romandini I, Altamura SA, Cenacchi A, et al. Leukocyte-Rich versus Leukocyte-Poor Platelet-Rich Plasma for the Treatment of Knee Osteoarthritis: A Double-Blind Randomized Trial. Am J Sports Med. 2022;50(3):609-617.","doi":"10.1177/03635465211064303","year":"2022","joint":"Knee","type":"RCT","comparator":"LR-PRP vs LP-PRP","blinding":"Double-blind","direction":"No difference","note":"Direct head-to-head of leukocyte-rich vs leukocyte-poor. Did not establish superiority of either."},{"pmid":"38410168","cite":"Patel S, Gahlaut S, Thami T, Chouhan DK, Jain A, Dhillon MS. Comparison of Conventional Dose Versus Superdose Platelet-Rich Plasma for Knee Osteoarthritis: A Prospective, Triple-Blind, Randomized Clinical Trial. Orthop J Sports Med. 2024;12(2):23259671241227863.","doi":"10.1177/23259671241227863","year":"2024","joint":"Knee","type":"RCT","comparator":"Conventional-dose PRP","blinding":"Triple-blind","direction":"Dose question","note":"Conventional dose vs 'superdose' PRP."},{"pmid":"33597586","cite":"Bansal H, Leon J, Pont JL, Wilson DA, Bansal A, Agarwal D, et al. Platelet-rich plasma (PRP) in osteoarthritis (OA) knee: Correct dose critical for long term clinical efficacy. Sci Rep. 2021;11(1):3971.","doi":"10.1038/s41598-021-83025-2","year":"2021","joint":"Knee","type":"Clinical trial","comparator":"Dose comparison","blinding":"Not blinded","direction":"Dose-dependent","note":"Proposed that correct dose is critical; threshold near 10 billion platelets per injection."},{"pmid":"23176112","cite":"Filardo G, Kon E, Di Martino A, Di Matteo B, Merli ML, Cenacchi A, et al. Platelet-rich plasma vs hyaluronic acid to treat knee degenerative pathology: study design and preliminary results of a randomized controlled trial. BMC Musculoskelet Disord. 2012;13:229.","doi":"10.1186/1471-2474-13-229","year":"2012","joint":"Knee","type":"RCT","comparator":"Hyaluronic acid","blinding":"Double-blind","direction":"No overall difference","note":"n=109, KL up to 3. Trend favouring PRP only in KL <=2. Higher post-injection pain with PRP (P=.039)."},{"pmid":"32698659","cite":"Korpershoek JV, Vonk LA, De Windt TS, Admiraal J, Kester EC, Van Egmond N, et al. Intra-articular injection with Autologous Conditioned Plasma does not lead to a clinically relevant improvement of knee osteoarthritis: a prospective case series of 140 patients with 1-year follow-up. Acta Orthop. 2020;91(6):743-749.","doi":"10.1080/17453674.2020.1795366","year":"2020","joint":"Knee","type":"Cohort","comparator":"None","blinding":"Open","direction":"Below MCID","note":"n=140/158 knees. KOOS 37->45(6m)->43(12m), below MCID. No predictors of outcome found."},{"pmid":"19838676","cite":"Kon E, Buda R, Filardo G, Di Martino A, Timoncini A, Cenacchi A, et al. Platelet-rich plasma: intra-articular knee injections produced favorable results on degenerative cartilage lesions. Knee Surg Sports Traumatol Arthrosc. 2009;18(4):472-9.","doi":"10.1007/s00167-009-0940-8","year":"2009","joint":"Knee","type":"Cohort","comparator":"None","blinding":"Open","direction":"Favourable","note":"n=100 (115 knees). Better in younger patients with lower degree of degeneration."},{"pmid":"20740273","cite":"Filardo G, Kon E, Buda R, Timoncini A, Di Martino A, Cenacchi A, et al. Platelet-rich plasma intra-articular knee injections for the treatment of degenerative cartilage lesions and osteoarthritis. Knee Surg Sports Traumatol Arthrosc. 2010;19(4):528-35.","doi":"10.1007/s00167-010-1238-6","year":"2010","joint":"Knee","type":"Cohort","comparator":"None","blinding":"Open","direction":"Attenuating","note":"2-year follow-up of above. Median duration of clinical improvement 9 months."},{"pmid":"26173792","cite":"Forogh B, Mianehsaz E, Shoaee S, Ahadi T, Raissi GR, Sajadi S. Effect of single injection of platelet-rich plasma in comparison with corticosteroid on knee osteoarthritis: a double-blind randomized clinical trial. J Sports Med Phys Fitness. 2015;56(7-8):901-8.","doi":"","year":"2015","joint":"Knee","type":"RCT","comparator":"Corticosteroid","blinding":"Double-blind","direction":"Mixed","note":"Single PRP vs single corticosteroid injection."},{"pmid":"30632533","cite":"Uslu G\u00fcvendi E, A\u015fkin A, G\u00fcvendi G, Ko\u00e7yi\u011fit H. Comparison of Efficiency Between Corticosteroid and Platelet Rich Plasma Injection Therapies in Patients With Knee Osteoarthritis. Arch Rheumatol. 2017;33(3):273-281.","doi":"10.5606/ArchRheumatol.2018.6608","year":"2017","joint":"Knee","type":"RCT","comparator":"Corticosteroid","blinding":"Randomised","direction":"Mixed","note":"One corticosteroid vs one vs three PRP injections."},{"pmid":"34907724","cite":"Reyes-Sosa R, Lugo-Radillo A, Cruz-Santiago L, Garcia-Cruz CR, Mendoza-Cano O. Clinical comparison of platelet-rich plasma injection and daily celecoxib administration in the treatment of early knee osteoarthritis: A randomized clinical trial. J Appl Biomed. 2020;18(2-3):41-45.","doi":"10.32725/jab.2020.012","year":"2020","joint":"Knee","type":"RCT","comparator":"Celecoxib","blinding":"Randomised","direction":"Favourable","note":"PRP vs daily celecoxib in early knee OA."},{"pmid":"38323999","cite":"Karaborklu Argut S, Celik D, Ergin ON, Kilicoglu OI. Does the Combination of Platelet-rich Plasma and Supervised Exercise Yield Better Pain Relief and Enhanced Function in Knee Osteoarthritis? A Randomized Controlled Trial. Clin Orthop Relat Res. 2024;482(6):1051-1061.","doi":"10.1097/CORR.0000000000002993","year":"2024","joint":"Knee","type":"RCT","comparator":"Exercise / combination","blinding":"Randomised","direction":"Combination","note":"PRP plus supervised exercise vs either alone."},{"pmid":"34698782","cite":"Paget LDA, Reurink G, de Vos RJ, Weir A, Moen MH, Bierma-Zeinstra SMA, et al. Effect of Platelet-Rich Plasma Injections vs Placebo on Ankle Symptoms and Function in Patients With Ankle Osteoarthritis: A Randomized Clinical Trial. JAMA. 2021;326(16):1595-1605.","doi":"10.1001/jama.2021.16602","year":"2021","joint":"Ankle","type":"RCT","comparator":"Placebo","blinding":"Double-blind, multicentre","direction":"No benefit","note":"PRIMA. n=100, tibiotalar OA, 2 US-guided injections. No benefit at 26 weeks."},{"pmid":"37417359","cite":"Paget LDA, Reurink G, de Vos RJ, Weir A, Moen MH, Bierma-Zeinstra SMA, et al. Platelet-Rich Plasma Injections for the Treatment of Ankle Osteoarthritis. Am J Sports Med. 2023;51(10):2625-2634.","doi":"10.1177/03635465231182438","year":"2023","joint":"Ankle","type":"RCT extension","comparator":"Placebo","blinding":"Double-blind","direction":"No benefit","note":"Same cohort extended to 52 weeks specifically to test the delayed-onset hypothesis. No benefit at 52 weeks."},{"pmid":"26797697","cite":"Dallari D, Stagni C, Rani N, Sabbioni G, Pelotti P, Torricelli P, et al. Ultrasound-Guided Injection of Platelet-Rich Plasma and Hyaluronic Acid, Separately and in Combination, for Hip Osteoarthritis: A Randomized Controlled Study. Am J Sports Med. 2016;44(3):664-71.","doi":"10.1177/0363546515620383","year":"2016","joint":"Hip","type":"RCT","comparator":"HA and combination","blinding":"Randomised","direction":"Mixed","note":"US-guided PRP, HA, and the combination."},{"pmid":"24579221","cite":"Battaglia M, Guaraldi F, Vannini F, Rossi G, Timoncini A, Buda R, et al. Efficacy of ultrasound-guided intra-articular injections of platelet-rich plasma versus hyaluronic acid for hip osteoarthritis. Orthopedics. 2013;36(12):e1501-8.","doi":"10.3928/01477447-20131120-13","year":"2013","joint":"Hip","type":"RCT","comparator":"Hyaluronic acid","blinding":"Randomised","direction":"Mixed","note":"US-guided PRP vs HA."},{"pmid":"27981279","cite":"Di Sante L, Villani C, Santilli V, Valeo M, Bologna E, Imparato L, et al. Intra-articular hyaluronic acid vs platelet-rich plasma in the treatment of hip osteoarthritis. Med Ultrason. 2016;18(4):463-468.","doi":"10.11152/mu-874","year":"2016","joint":"Hip","type":"RCT","comparator":"Hyaluronic acid","blinding":"Randomised","direction":"Mixed","note":"Intra-articular HA vs PRP."},{"pmid":"36096771","cite":"Nouri F, Babaee M, Peydayesh P, Esmaily H, Raeissadat SA. Comparison between the effects of ultrasound guided intra-articular injections of platelet-rich plasma (PRP), high molecular weight hyaluronic acid, and their combination in hip osteoarthritis: a randomized clinical trial. BMC Musculoskelet Disord. 2022;23(1):856.","doi":"10.1186/s12891-022-05787-8","year":"2022","joint":"Hip","type":"RCT","comparator":"HA and combination","blinding":"Randomised","direction":"Mixed","note":"US-guided PRP vs high-MW HA vs combination."},{"pmid":"33786329","cite":"Kraeutler MJ, Houck DA, Garabekyan T, Miller SL, Dragoo JL, Mei-Dan O. Comparing Intra-articular Injections of Leukocyte-Poor Platelet-Rich Plasma Versus Low-Molecular Weight Hyaluronic Acid for the Treatment of Symptomatic Osteoarthritis of the Hip: A Double-Blind, Randomized Pilot Study. Orthop J Sports Med. 2021;9(1):2325967120969210.","doi":"10.1177/2325967120969210","year":"2021","joint":"Hip","type":"RCT (pilot)","comparator":"Low-MW hyaluronic acid","blinding":"Double-blind","direction":"Mixed","note":"LP-PRP vs low-molecular-weight HA. Pilot study."},{"pmid":"30343590","cite":"Malahias MA, Roumeliotis L, Nikolaou VS, Chronopoulos E, Sourlas I, Babis GC. Platelet-Rich Plasma versus Corticosteroid Intra-Articular Injections for the Treatment of Trapeziometacarpal Arthritis: A Prospective Randomized Controlled Clinical Trial. Cartilage. 2018;12(1):51-61.","doi":"10.1177/1947603518805230","year":"2018","joint":"Thumb base","type":"RCT","comparator":"Corticosteroid","blinding":"Blind","direction":"Mixed","note":"2 US-guided PRP vs 2 methylprednisolone/lidocaine injections. n=33, Eaton-Littler I-III."},{"pmid":"37039525","cite":"Winter R, Tuca AC, Justich I, Tschauner S, Friedl H, Girsch W, et al. Minimally Invasive Treatment of Trapeziometacarpal Osteoarthritis: Results of a Blinded Randomized Controlled Trial. Plast Reconstr Surg. 2023;152(6):1277-1285.","doi":"10.1097/PRS.0000000000010516","year":"2023","joint":"Thumb base","type":"RCT","comparator":"Other minimally invasive","blinding":"Blinded","direction":"Mixed","note":"Minimally invasive treatment of trapeziometacarpal OA."},{"pmid":"39587622","cite":"von Kieseritzky J, Wilcke M. High-concentrated platelet-rich plasma (PRP) versus placebo in osteoarthritis in the thumb base: study protocol for an assessor-blinded randomized controlled trial. Trials. 2024;25(1):797.","doi":"10.1186/s13063-024-08636-2","year":"2024","joint":"Thumb base","type":"Protocol","comparator":"Placebo","blinding":"Assessor-blind","direction":"Not yet reported","note":"High-concentration PRP vs placebo. Registered protocol; results awaited."},{"pmid":"35316820","cite":"Kirschner JS, Cheng J, Creighton A, Santiago K, Hurwitz N, Dundas M, et al. Efficacy of Ultrasound-Guided Glenohumeral Joint Injections of Leukocyte-Poor Platelet-Rich Plasma Versus Hyaluronic Acid in the Treatment of Glenohumeral Osteoarthritis: A Randomized, Double-Blind Controlled Trial. Clin J Sport Med. 2022;32(6):558-566.","doi":"10.1097/JSM.0000000000001029","year":"2022","joint":"Shoulder","type":"RCT","comparator":"Hyaluronic acid","blinding":"Double-blind","direction":"Mixed","note":"US-guided LP-PRP vs HA for glenohumeral OA. The only randomised trial at this joint."},{"pmid":"40653151","cite":"Auroux M, Debionne T, Mainbourg S, Chapurlat R. Efficacy of intra-articular platelet-rich plasma compared with placebo in knee osteoarthritis: A systematic review and meta-analysis. Joint Bone Spine. 2025;92(6):105947.","doi":"10.1016/j.jbspin.2025.105947","year":"2025","joint":"Knee","type":"Meta-analysis","comparator":"Placebo","blinding":"Mixed","direction":"Favourable","note":"PRP vs placebo specifically."},{"pmid":"39267256","cite":"Goh SL, Chong MW, Ling J, Jaafar Z, Lim ZL, Yau MY, et al. Semi-invasive therapies for pain in knee osteoarthritis: A systematic review and network meta-analysis. Pain Pract. 2024;25(1):e13404.","doi":"10.1111/papr.13404","year":"2024","joint":"Knee","type":"Network MA","comparator":"Multiple","blinding":"Mixed","direction":"Favourable","note":"111 studies, 14,695 participants. PRP ranked 2nd (ES 0.75, 95% CI 0.28-1.22); only intervention significant at 3, 6 and 12 months, but significance lost in some sensitivity analyses."},{"pmid":"38331363","cite":"Jawanda H, Khan ZA, Warrier AA, Acu\u00f1a AJ, Allahabadi S, Kaplan DJ, et al. Platelet-Rich Plasma, Bone Marrow Aspirate Concentrate, and Hyaluronic Acid Injections Outperform Corticosteroids in Pain and Function Scores at a Minimum of 6 Months as Intra-Articular Injections for Knee Osteoarthritis: A Systematic Review and Network Meta-analysis. Arthroscopy. 2024;40(5):1623-1636.e1.","doi":"10.1016/j.arthro.2024.01.037","year":"2024","joint":"Knee","type":"Network MA","comparator":"CS, HA, BMAC","blinding":"Mixed","direction":"Favourable","note":"PRP, BMAC and HA outperform corticosteroids at minimum 6 months."},{"pmid":"36913992","cite":"Belk JW, Lim JJ, Keeter C, McCulloch PC, Houck DA, McCarty EC, et al. Patients With Knee Osteoarthritis Who Receive Platelet-Rich Plasma or Bone Marrow Aspirate Concentrate Injections Have Better Outcomes Than Patients Who Receive Hyaluronic Acid: Systematic Review and Meta-analysis. Arthroscopy. 2023;39(7):1714-1734.","doi":"10.1016/j.arthro.2023.03.001","year":"2023","joint":"Knee","type":"Meta-analysis","comparator":"HA, BMAC","blinding":"Mixed","direction":"Favourable","note":"PRP and BMAC better than HA. 27 Level-I studies."},{"pmid":"33713757","cite":"Zhao D, Pan JK, Yang WY, Han YH, Zeng LF, Liang GH, et al. Intra-Articular Injections of Platelet-Rich Plasma, Adipose Mesenchymal Stem Cells, and Bone Marrow Mesenchymal Stem Cells Associated With Better Outcomes Than Hyaluronic Acid and Saline in Knee Osteoarthritis: A Systematic Review and Network Meta-analysis. Arthroscopy. 2021;37(7):2298-2314.e10.","doi":"10.1016/j.arthro.2021.02.045","year":"2021","joint":"Knee","type":"Network MA","comparator":"HA, saline, MSC","blinding":"Mixed","direction":"Favourable","note":"LP-PRP and LR-PRP analysed separately alongside HA, saline, BM-MSC, AD-MSC."},{"pmid":"32305424","cite":"Han SB, Seo IW, Shin YS. Intra-Articular Injections of Hyaluronic Acid or Steroids Associated With Better Outcomes Than Platelet-Rich Plasma, Adipose Mesenchymal Stromal Cells, or Placebo in Knee Osteoarthritis: A Network Meta-analysis. Arthroscopy. 2020;37(1):292-306.","doi":"10.1016/j.arthro.2020.03.041","year":"2020","joint":"Knee","type":"Network MA","comparator":"HA, steroid, MSC","blinding":"Mixed","direction":"Unfavourable","note":"43 trials, 5,554 patients. HA or steroids associated with better outcomes than PRP, adipose MSC or placebo."},{"pmid":"34500430","cite":"Anil U, Markus DH, Hurley ET, Manjunath AK, Alaia MJ, Campbell KA, et al. The efficacy of intra-articular injections in the treatment of knee osteoarthritis: A network meta-analysis of randomized controlled trials. Knee. 2021;32:173-182.","doi":"10.1016/j.knee.2021.08.008","year":"2021","joint":"Knee","type":"Network MA","comparator":"Multiple injectables","blinding":"Mixed","direction":"Caution","note":"79 RCTs, 8,761 patients. Ranked SVF highest - a pattern consistent with blinding failure. Interpret with care."},{"pmid":"32725315","cite":"Migliorini F, Driessen A, Quack V, Sippel N, Cooper B, Mansy YE, et al. Comparison between intra-articular infiltrations of placebo, steroids, hyaluronic and PRP for knee osteoarthritis: a Bayesian network meta-analysis. Arch Orthop Trauma Surg. 2020;141(9):1473-1490.","doi":"10.1007/s00402-020-03551-y","year":"2020","joint":"Knee","type":"Bayesian NMA","comparator":"Placebo, steroid, HA","blinding":"Mixed","direction":"Mixed","note":"Comparisons at 3, 6 and 12 months."},{"pmid":"29688920","cite":"Jevsevar DS, Shores PB, Mullen K, Schulte DM, Brown GA, Cummins DS. Mixed Treatment Comparisons for Nonsurgical Treatment of Knee Osteoarthritis: A Network Meta-analysis. J Am Acad Orthop Surg. 2018;26(9):325-336.","doi":"10.5435/JAAOS-D-17-00318","year":"2018","joint":"Knee","type":"Network MA","comparator":"NSAIDs, APAP, CS, HA","blinding":"Mixed","direction":"Mixed","note":"Mixed treatment comparison of nonsurgical treatments with clinically relevant thresholds."},{"pmid":"38037038","cite":"Qiao X, Yan L, Feng Y, Li X, Zhang K, Lv Z, et al. Efficacy and safety of corticosteroids, hyaluronic acid, and PRP and combination therapy for knee osteoarthritis: a systematic review and network meta-analysis. BMC Musculoskelet Disord. 2023;24(1):926.","doi":"10.1186/s12891-023-06925-6","year":"2023","joint":"Knee","type":"Network MA","comparator":"CS, HA, combination","blinding":"Mixed","direction":"Favourable","note":"Includes treatment-related adverse events as an outcome."},{"pmid":"40022138","cite":"Khalilizad M, Emadian ST, Marzban Abbas Abadi M. Comparative efficacy of different doses of platelet-rich plasma injection in the treatment of knee osteoarthritis: a systematic review and network meta-analysis. J Orthop Surg Res. 2025;20(1):221.","doi":"10.1186/s13018-025-05650-1","year":"2025","joint":"Knee","type":"Network MA","comparator":"PRP doses","blinding":"Mixed","direction":"Dose-dependent","note":"Compared single, two and three-injection regimens."},{"pmid":"40551225","cite":"Yu D, Zhao J, Zhao K. The efficacy of platelet-rich plasma preparation protocols in the treatment of osteoarthritis: a network meta-analysis of randomized controlled trials. J Orthop Surg Res. 2025;20(1):614.","doi":"10.1186/s13018-025-06026-1","year":"2025","joint":"Knee","type":"Network MA","comparator":"Preparation protocols","blinding":"Mixed","direction":"Protocol-dependent","note":"Compared PRP preparation protocols directly."},{"pmid":"32302218","cite":"Belk JW, Kraeutler MJ, Houck DA, Goodrich JA, Dragoo JL, McCarty EC. Platelet-Rich Plasma Versus Hyaluronic Acid for Knee Osteoarthritis: A Systematic Review and Meta-analysis of Randomized Controlled Trials. Am J Sports Med. 2020;49(1):249-260.","doi":"10.1177/0363546520909397","year":"2020","joint":"Knee","type":"Meta-analysis","comparator":"Hyaluronic acid","blinding":"Level I only","direction":"Favourable","note":"18 Level-I studies, 811 vs 797 patients. WOMAC improvement 44.7% vs 12.6% (P<.01). LP-PRP better IKDC than LR-PRP."},{"pmid":"34277879","cite":"Kim JH, Park YB, Ha CW, Roh YJ, Park JG. Adverse Reactions and Clinical Outcomes for Leukocyte-Poor Versus Leukocyte-Rich Platelet-Rich Plasma in Knee Osteoarthritis: A Systematic Review and Meta-analysis. Orthop J Sports Med. 2021;9(6):23259671211011948.","doi":"10.1177/23259671211011948","year":"2021","joint":"Knee","type":"Meta-analysis","comparator":"LP vs LR PRP","blinding":"Mixed","direction":"LP favoured","note":"Adverse reactions and clinical outcomes by leukocyte content."},{"pmid":"35316112","cite":"Costa LAV, Lenza M, Irrgang JJ, Fu FH, Ferretti M. How Does Platelet-Rich Plasma Compare Clinically to Other Therapies in the Treatment of Knee Osteoarthritis? A Systematic Review and Meta-analysis. Am J Sports Med. 2022;51(4):1074-1086.","doi":"10.1177/03635465211062243","year":"2022","joint":"Knee","type":"Meta-analysis","comparator":"Other nonsurgical","blinding":"Mixed","direction":"Qualified","note":"GRADE assessment of benefits and harms."},{"pmid":"40409439","cite":"Fucaloro SP, Bragg J, Berhane M, Mulvey M, Krivicich L, Zink T, et al. Complications of Platelet-Rich Plasma Injection for Knee Osteoarthritis Are Similar to Those of Corticosteroids and Hyaluronic Acid but Are Significantly Greater Than Those of Placebo Injections: A Meta-analysis of Randomized Controlled Trials. Arthroscopy. 2025;41(11):4789-4803.","doi":"10.1016/j.arthro.2025.05.018","year":"2025","joint":"Knee","type":"Meta-analysis","comparator":"HA, CS, saline","blinding":"RCTs","direction":"Safety","note":"Complications similar to corticosteroids and HA but SIGNIFICANTLY GREATER than placebo saline."},{"pmid":"32829298","cite":"Gazendam A, Ekhtiari S, Bozzo A, Phillips M, Bhandari M. Intra-articular saline injection is as effective as corticosteroids, platelet-rich plasma and hyaluronic acid for hip osteoarthritis pain: a systematic review and network meta-analysis of randomised controlled trials. Br J Sports Med. 2020;55(5):256-261.","doi":"10.1136/bjsports-2020-102179","year":"2020","joint":"Hip","type":"Network MA","comparator":"CS, PRP, HA, saline","blinding":"Mixed","direction":"No benefit","note":"Intra-articular saline is as effective as corticosteroids, PRP and HA for hip OA pain."},{"pmid":"35971803","cite":"Lim A, Zhu JB, Khanduja V. The Use of Intra-articular Platelet-Rich Plasma as a Therapeutic Intervention for Hip Osteoarthritis: A Systematic Review and Meta-analysis. Am J Sports Med. 2022;51(9):2487-2497.","doi":"10.1177/03635465221095563","year":"2022","joint":"Hip","type":"Meta-analysis","comparator":"Multiple","blinding":"Mixed","direction":"Limited","note":"Systematic review and meta-analysis of IA PRP for hip OA."},{"pmid":"37905161","cite":"Sambe HG, Yasir M, Man RK, Gogikar A, Nanda A, Janga LSN, et al. Comparing Intra-articular Platelet-Rich Plasma With Hyaluronic Acid for the Treatment of Hip Osteoarthritis: A Systematic Review and Meta-Analysis. Cureus. 2023;15(10):e47919.","doi":"10.7759/cureus.47919","year":"2023","joint":"Hip","type":"Meta-analysis","comparator":"Hyaluronic acid","blinding":"Mixed","direction":"Limited","note":"PRP vs HA at the hip."},{"pmid":"38821500","cite":"Lei T, Wang Y, Li M, Hua L. Clinical efficacy of multiple intra-articular injection for hip osteoarthritis. Bone Joint J. 2024;106-B(6):532-539.","doi":"10.1302/0301-620X.106B6.BJJ-2023-1272.R1","year":"2024","joint":"Hip","type":"Network MA","comparator":"Multiple injections","blinding":"Mixed","direction":"Limited","note":"Clinical efficacy of multiple intra-articular injection regimens at the hip."},{"pmid":"39569300","cite":"Almutairi AN, Alazzeh MS. Efficacy and Safety of Platelet-Rich Plasma (PRP) Intra-articular Injections in Hip Osteoarthritis: A Systematic Review of Randomized Clinical Trials. Cureus. 2024;16(10):e72057.","doi":"10.7759/cureus.72057","year":"2024","joint":"Hip","type":"Systematic review","comparator":"Multiple","blinding":"RCTs","direction":"Limited","note":"Efficacy and safety of IA PRP in hip OA."},{"pmid":"37208754","cite":"Laohajaroensombat S, Prusmetikul S, Rattanasiri S, Thakkinstian A, Woratanarat P. Platelet-rich plasma injection for the treatment of ankle osteoarthritis: a systematic review and meta-analysis. J Orthop Surg Res. 2023;18(1):373.","doi":"10.1186/s13018-023-03828-z","year":"2023","joint":"Ankle","type":"Meta-analysis","comparator":"Multiple","blinding":"Mixed","direction":"Limited","note":"PRP injection for ankle OA."},{"pmid":"39741342","cite":"Ding Q, Wang X, Liu Y, Li Y, Zhang D, Wang H, et al. The efficacy of platelet-rich plasma in ankle disease: a systematic review and meta-analysis. J Orthop Surg Res. 2024;19(1):895.","doi":"10.1186/s13018-024-05420-5","year":"2024","joint":"Ankle","type":"Meta-analysis","comparator":"Multiple","blinding":"Mixed","direction":"Mixed","note":"PRP in ankle disease broadly - includes conditions other than OA."},{"pmid":"36219860","cite":"Winter R, Hasiba-Pappas SK, Tuca AC, Zrim R, Nischwitz S, Popp D, et al. Autologous Fat and Platelet-Rich Plasma Injections in Trapeziometacarpal Osteoarthritis: A Systematic Review and Meta-Analysis. Plast Reconstr Surg. 2022;151(1):119-131.","doi":"10.1097/PRS.0000000000009789","year":"2022","joint":"Thumb base","type":"Meta-analysis","comparator":"Autologous fat","blinding":"Mixed","direction":"Limited","note":"Pools PRP with autologous fat grafting."},{"pmid":"37314198","cite":"Familiari F, Ammendolia A, Rupp MC, Russo R, Pujia A, Montalcini T, et al. Efficacy of intra-articular injections of hyaluronic acid in patients with glenohumeral joint osteoarthritis: A systematic review and meta-analysis. J Orthop Res. 2023;41(11):2345-2358.","doi":"10.1002/jor.25648","year":"2023","joint":"Shoulder","type":"Meta-analysis","comparator":"Placebo/other","blinding":"Mixed","direction":"Limited","note":"HA in glenohumeral OA - context for the single PRP trial."},{"pmid":"26490760","cite":"J\u00fcni P, Hari R, Rutjes AW, Fischer R, Silletta MG, Reichenbach S, et al. Intra-articular corticosteroid for knee osteoarthritis. Cochrane Database Syst Rev. 2015;2015(10):CD005328.","doi":"10.1002/14651858.CD005328.pub3","year":"2015","joint":"Knee","type":"Cochrane","comparator":"Placebo","blinding":"Mixed","direction":"Comparator","note":"Corticosteroid: SMD -0.40 overall; -0.22 at 13 weeks; -0.07 at 26 weeks (no effect)."},{"pmid":"28510679","cite":"McAlindon TE, LaValley MP, Harvey WF, Price LL, Driban JB, Zhang M, et al. Effect of Intra-articular Triamcinolone vs Saline on Knee Cartilage Volume and Pain in Patients With Knee Osteoarthritis: A Randomized Clinical Trial. JAMA. 2017;317(19):1967-1975.","doi":"10.1001/jama.2017.5283","year":"2017","joint":"Knee","type":"RCT","comparator":"Saline","blinding":"Double-blind","direction":"Comparator harm","note":"Triamcinolone 40mg q12wk x2yr: cartilage loss -0.21mm vs -0.10mm (diff -0.11, 95% CI -0.20 to -0.03), no pain benefit."},{"pmid":"36333100","cite":"Pereira TV, J\u00fcni P, Saadat P, Xing D, Yao L, Bobos P, et al. Viscosupplementation for knee osteoarthritis: systematic review and meta-analysis. BMJ. 2022;378:e069722.","doi":"10.1136/bmj-2022-069722","year":"2022","joint":"Knee","type":"Meta-analysis","comparator":"Placebo","blinding":"24 large blinded trials","direction":"Comparator","note":"Viscosupplementation SMD -0.08 (95% CI -0.15 to -0.02); conclusive clinical equivalence to placebo since 2009."},{"pmid":"28027657","cite":"Saltzman BM, Leroux T, Meyer MA, Basques BA, Chahal J, Bach BR, et al. The Therapeutic Effect of Intra-articular Normal Saline Injections for Knee Osteoarthritis: A Meta-analysis of Evidence Level 1 Studies. Am J Sports Med. 2016;45(11):2647-2653.","doi":"10.1177/0363546516680607","year":"2016","joint":"Knee","type":"Meta-analysis","comparator":"n/a","blinding":"Level I placebo arms","direction":"Placebo","note":"IA saline improved VAS 16.62 points and WOMAC 11.34 at 6 months, exceeding stated MCIDs."},{"pmid":"26215539","cite":"Bannuru RR, McAlindon TE, Sullivan MC, Wong JB, Kent DM, Schmid CH. Effectiveness and Implications of Alternative Placebo Treatments: A Systematic Review and Network Meta-analysis of Osteoarthritis Trials. Ann Intern Med. 2015;163(5):365-72.","doi":"10.7326/M15-0623","year":"2015","joint":"Knee","type":"Network MA","comparator":"Placebo types","blinding":"149 RCTs","direction":"Placebo","note":"IA placebo ES 0.29 (95% CrI 0.09-0.49), significantly greater than oral placebo. Reverses the treatment hierarchy."},{"pmid":"18541604","cite":"Zhang W, Robertson J, Jones AC, Dieppe PA, Doherty M. The placebo effect and its determinants in osteoarthritis: meta-analysis of randomised controlled trials. Ann Rheum Dis. 2008;67(12):1716-23.","doi":"10.1136/ard.2008.092015","year":"2008","joint":"Multiple","type":"Meta-analysis","comparator":"Untreated control","blinding":"198 trials","direction":"Placebo","note":"Placebo pain ES 0.51 vs 0.03 untreated. Injection delivery increases the effect (beta=0.144, P=.020)."},{"pmid":"26882927","cite":"Zou K, Wong J, Abdullah N, Chen X, Smith T, Doherty M, et al. Examination of overall treatment effect and the proportion attributable to contextual effect in osteoarthritis: meta-analysis of randomised controlled trials. Ann Rheum Dis. 2016;75(11):1964-1970.","doi":"10.1136/annrheumdis-2015-208387","year":"2016","joint":"Multiple","type":"Meta-analysis","comparator":"n/a","blinding":"215 trials","direction":"Placebo","note":"75% of the observed treatment effect is contextual (PCE 0.75, 95% CI 0.72-0.79)."},{"pmid":"40169165","cite":"Whittle SL, Johnston RV, McDonald S, Worthley D, Campbell TM, Cyril S, et al. Stem cell injections for osteoarthritis of the knee. Cochrane Database Syst Rev. 2025;4(4):CD013342.","doi":"10.1002/14651858.CD013342.pub2","year":"2025","joint":"Knee","type":"Cochrane","comparator":"Placebo","blinding":"25 RCTs","direction":"Low certainty","note":"Stem cells: pain 1.2/10 better (LOW certainty). Radiographic progression not assessed in ANY included study. Suspected publication bias."},{"pmid":"39625083","cite":"Lawford BJ, Hall M, Hinman RS, Van der Esch M, Harmer AR, Spiers L, et al. Exercise for osteoarthritis of the knee. Cochrane Database Syst Rev. 2024;12(12):CD004376.","doi":"10.1002/14651858.CD004376.pub4","year":"2024","joint":"Knee","type":"Cochrane","comparator":"Multiple","blinding":"139 trials","direction":"Comparator","note":"Exercise: pain MD 8.70 (95% CI 5.70-11.70) vs attention control; CIs did not clearly reach the MID."},{"pmid":"39476339","cite":"Bliddal H, Bays H, Czernichow S, Udd\u00e9n Hemmingsson J, Hjelmes\u00e6th J, Hoffmann Morville T, et al. Once-Weekly Semaglutide in Persons with Obesity and Knee Osteoarthritis. N Engl J Med. 2024;391(17):1573-1583.","doi":"10.1056/NEJMoa2403664","year":"2024","joint":"Knee","type":"RCT","comparator":"Placebo","blinding":"Double-blind","direction":"Comparator","note":"STEP 9. Semaglutide 2.4mg 68wk in obesity + knee OA: WOMAC pain -41.7 vs -27.5 (P<.001)."},{"pmid":"26488691","cite":"Skou ST, Roos EM, Laursen MB, Rathleff MS, Arendt-Nielsen L, Simonsen O, et al. A Randomized, Controlled Trial of Total Knee Replacement. N Engl J Med. 2015;373(17):1597-606.","doi":"10.1056/NEJMoa1505467","year":"2015","joint":"Knee","type":"RCT","comparator":"Non-surgical","blinding":"Randomised","direction":"Comparator","note":"TKR vs non-surgical: KOOS4 +32.5 vs +16.0 (diff 15.8). SAEs 24 vs 6. 74% of the non-surgical arm did NOT cross over."},{"pmid":"40703537","cite":"Mass H, Collins JE, Yang C, Hunter DJ, Jones MH, Tsai L, et al. Intra-articular injections for knee osteoarthritis management: Analysis of cost-effectiveness. Osteoarthr Cartil Open. 2025;7(3):100641.","doi":"10.1016/j.ocarto.2025.100641","year":"2025","joint":"Knee","type":"Cost-effectiveness","comparator":"Multiple","blinding":"Model","direction":"Above threshold","note":"PRP vs HA $112,100/QALY base case, $151,300 in sensitivity. Saline vs no injection $8,300/QALY. CS dominated by saline."},{"pmid":"30189436","cite":"Piuzzi NS, Ng M, Kantor A, Ng K, Kha S, Mont MA, et al. What Is the Price and Claimed Efficacy of Platelet-Rich Plasma Injections for the Treatment of Knee Osteoarthritis in the United States? J Knee Surg. 2018;32(9):879-885.","doi":"10.1055/s-0038-1669953","year":"2018","joint":"Knee","type":"Survey","comparator":"n/a","blinding":"Secret shopper","direction":"Cost","note":"Mean US price $714 +/- 144 per unilateral knee injection (2018). Mean claimed efficacy 76% +/- 11%."},{"pmid":"38436492","cite":"Laver L, Filardo G, Sanchez M, Magalon J, Tischer T, Abat F, et al. The use of injectable orthobiologics for knee osteoarthritis: A European ESSKA-ORBIT consensus. Part 1-Blood-derived products (platelet-rich plasma). Knee Surg Sports Traumatol Arthrosc. 2024;32(4):783-797.","doi":"10.1002/ksa.12077","year":"2024","joint":"Knee","type":"Consensus","comparator":"n/a","blinding":"ESSKA-ORBIT","direction":"Favourable","note":"Three Grade A statements. Valid option; possible first-line injectable for KL 1-3. 12 of 28 statements were expert opinion only."},{"pmid":"38961773","cite":"Kon E, de Girolamo L, Laver L, Andriolo L, Andia I, Bastos R, et al. Platelet-rich plasma injections for the management of knee osteoarthritis: The ESSKA-ICRS consensus. Recommendations using the RAND/UCLA appropriateness method for different clinical scenarios. Knee Surg Sports Traumatol Arthrosc. 2024;32(11):2938-2949.","doi":"10.1002/ksa.12320","year":"2024","joint":"Knee","type":"Consensus","comparator":"n/a","blinding":"ESSKA-ICRS","direction":"Conditional","note":"216 scenarios: 38.9% appropriate, 4.2% inappropriate, 56.9% uncertain. Appropriate KL 0-III after failed treatment; NOT as first treatment or KL IV."},{"pmid":"41989317","cite":"Borg-Stein J, Jayaram P, Colorado BS, de Luigi AJ, Khadavi M, Latzka E, et al. AAPM&R guidance statement on platelet rich plasma for knee osteoarthritis. PM R. 2026;18 Suppl 2:S20-S35.","doi":"10.1002/pmrj.70144","year":"2026","joint":"Knee","type":"Guidance","comparator":"n/a","blinding":"AAPM&R","direction":"Favourable","note":"5 evidence-based recommendations and 11 consensus best practices. Consider for mild-to-moderate knee OA symptomatic despite conservative care."},{"pmid":"31278997","cite":"Bannuru RR, Osani MC, Vaysbrot EE, Arden NK, Bennell K, Bierma-Zeinstra SMA, et al. OARSI guidelines for the non-surgical management of knee, hip, and polyarticular osteoarthritis. Osteoarthritis Cartilage. 2019;27(11):1578-1589.","doi":"10.1016/j.joca.2019.06.011","year":"2019","joint":"Multiple","type":"Guideline","comparator":"n/a","blinding":"OARSI","direction":"Against","note":"Strongly recommended against (Level 5): evidence of extremely low quality, formulations not standardised."},{"pmid":"31908163","cite":"Kolasinski SL, Neogi T, Hochberg MC, Oatis C, Guyatt G, Block J, et al. 2019 American College of Rheumatology/Arthritis Foundation Guideline for the Management of Osteoarthritis of the Hand, Hip, and Knee. Arthritis Rheumatol. 2020;72(2):220-233.","doi":"10.1002/art.41142","year":"2020","joint":"Multiple","type":"Guideline","comparator":"n/a","blinding":"ACR/AF","direction":"Against","note":"Strongly recommended against for knee and hip. No recommendation for hand."},{"pmid":"35383651","cite":"Brophy RH, Fillingham YA. AAOS Clinical Practice Guideline Summary: Management of Osteoarthritis of the Knee (Nonarthroplasty), Third Edition. J Am Acad Orthop Surg. 2022;30(9):e721-e729.","doi":"10.5435/JAAOS-D-21-01233","year":"2022","joint":"Knee","type":"Guideline summary","comparator":"n/a","blinding":"AAOS","direction":"Limited","note":"'May reduce pain and improve function' - strength Limited (downgrade)."},{"pmid":"38781351","cite":"Hannon CP, Delanois RE, Brown N, Cibulka M, D'Apuzzo M, Davis C, et al. American Academy of Orthopaedic Surgeons Clinical Practice Guideline Summary Management of Osteoarthritis of the Hip. J Am Acad Orthop Surg. 2024;32(20):e1027-e1034.","doi":"10.5435/JAAOS-D-24-00420","year":"2024","joint":"Hip","type":"Guideline summary","comparator":"n/a","blinding":"AAOS","direction":"Silent","note":"AAOS hip OA CPG contains no PRP recommendation."},{"pmid":"34035002","cite":"Uson J, Rodriguez-Garc\u00eda SC, Castellanos-Moreira R, O'Neill TW, Doherty M, Boesen M, et al. EULAR recommendations for intra-articular therapies. Ann Rheum Dis. 2021;80(10):1299-1305.","doi":"10.1136/annrheumdis-2021-220266","year":"2021","joint":"Multiple","type":"Recommendations","comparator":"n/a","blinding":"EULAR","direction":"Procedural only","note":"Intra-articular therapy recommendations are procedural; disease-specific indications explicitly out of scope."},{"pmid":"34103406","cite":"Rodriguez-Garc\u00eda SC, Castellanos-Moreira R, Uson J, Naredo E, O'Neill TW, Doherty M, et al. Efficacy and safety of intra-articular therapies in rheumatic and musculoskeletal diseases: an overview of systematic reviews. RMD Open. 2021;7(2).","doi":"10.1136/rmdopen-2021-001658","year":"2021","joint":"Multiple","type":"Overview of SRs","comparator":"n/a","blinding":"EULAR-commissioned","direction":"Joint-dependent","note":"PRP showed benefit in pain and function in knee OA but NOT in hip OA."},{"pmid":"39073848","cite":"Kon E, Anzillotti G, Conte P, Ruosi L, Cole B, Dragoo J, et al. The chimera of reaching a universal consensus on platelet-rich plasma treatment for knee osteoarthritis: a review of recent consensus statements and expert opinion. Expert Opin Biol Ther. 2024;24(8):827-833.","doi":"10.1080/14712598.2024.2383865","year":"2024","joint":"Multiple","type":"Review","comparator":"n/a","blinding":"n/a","direction":"Divergence","note":"19 guidelines identified; documents temporal and geographic evolution in attitudes toward PRP."},{"pmid":"34485586","cite":"Phillips M, Bhandari M, Grant J, Bedi A, Trojian T, Johnson A, et al. A Systematic Review of Current Clinical Practice Guidelines on Intra-articular Hyaluronic Acid, Corticosteroid, and Platelet-Rich Plasma Injection for Knee Osteoarthritis: An International Perspective. Orthop J Sports Med. 2021;9(8):23259671211030272.","doi":"10.1177/23259671211030272","year":"2021","joint":"Knee","type":"SR of guidelines","comparator":"n/a","blinding":"n/a","direction":"Divergence","note":"11 guidelines addressed PRP: 9 uncertain/unable to recommend, 2 against. Guidelines cite selective subsets of the evidence."},{"pmid":"40728909","cite":"Barr J, Stern M, Hunter K, Gentile P, Clinton C. Analyzing Disparities in Platelet-Rich Plasma Preinjection Protocols for Musculoskeletal Injuries. Clin J Sport Med. 2025;36(2):179-184.","doi":"10.1097/JSM.0000000000001384","year":"2025","joint":"Multiple","type":"Survey","comparator":"n/a","blinding":"n=246","direction":"Practice","note":"90.5% used commercial kits; 63.0% used both LR and LP; CBCs not ordered in 93.3% of cases."},{"pmid":"24725317","cite":"Magalon J, Bausset O, Serratrice N, Giraudo L, Aboudou H, Veran J, et al. Characterization and comparison of 5 platelet-rich plasma preparations in a single-donor model. Arthroscopy. 2014;30(5):629-38.","doi":"10.1016/j.arthro.2014.02.020","year":"2014","joint":"n/a","type":"Lab study","comparator":"5 systems","blinding":"Single donor","direction":"Heterogeneity","note":"Five commercial systems produced materially different products from the same donor's blood."},{"pmid":"29040132","cite":"Chahla J, Cinque ME, Piuzzi NS, Mannava S, Geeslin AG, Murray IR, et al. A Call for Standardization in Platelet-Rich Plasma Preparation Protocols and Composition Reporting: A Systematic Review of the Clinical Orthopaedic Literature. J Bone Joint Surg Am. 2017;99(20):1769-1779.","doi":"10.2106/JBJS.16.01374","year":"2017","joint":"n/a","type":"Systematic review","comparator":"n/a","blinding":"n/a","direction":"Reporting","note":"Call for standardisation of PRP preparation protocols and composition reporting."}];
+const MCIDS=[{"id":"womac_l","label":"WOMAC pain, Likert 0\u201320","v":1.8,"src":"RESTORE trial stated MCID"},{"id":"womac_l2","label":"WOMAC pain, Likert 0\u201320","v":3.94,"src":"Corticosteroid structural trial stated MCID"},{"id":"womac_l3","label":"WOMAC pain, Likert 0\u201320","v":1.6,"src":"Community weight-loss trial stated MCID"},{"id":"womac100","label":"WOMAC pain, 0\u2013100","v":12.0,"src":"Exercise Cochrane review MID for pain"},{"id":"womacf100","label":"WOMAC function, 0\u2013100","v":13.0,"src":"Exercise Cochrane review MID for function"},{"id":"koos","label":"KOOS subscale, 0\u2013100 (higher better)","v":10.0,"src":"Commonly used responder threshold in characterised PRP cohorts"},{"id":"vas10","label":"VAS/NRS pain, 0\u201310","v":1.5,"src":"Commonly cited; verify against your own population"},{"id":"custom","label":"Custom \u2014 enter your own","v":null,"src":"State the source in the record"}];
+const JOINTS={"knee":{"name":"Knee","tier":"mixed","text":"Mixed. The largest and best-blinded placebo-controlled trial (n=288) found no difference from saline in pain or cartilage volume at 12 months; most meta-analyses are modestly favourable. Favourable consensus positions are scoped to KL 1\u20133."},"hip":{"name":"Hip","tier":"weak","text":"Weak. No adequately powered blinded saline-controlled trial exists. A network meta-analysis concluded that intra-articular saline is as effective as corticosteroid, PRP or hyaluronic acid for hip OA pain. No professional body endorses the use."},"thumb":{"name":"Thumb base (1st CMC)","tier":"weak","text":"Very limited. Two small randomised trials, neither placebo-controlled. A placebo-controlled trial has been registered but had not reported at the evidence cut-off. No professional body has issued any position."},"ankle":{"name":"Ankle (tibiotalar)","tier":"negative","text":"NEGATIVE. A multicentre double-blind placebo-controlled randomised trial (n=100) found no benefit at 26 weeks and, on planned extension specifically designed to test the delayed-onset hypothesis, none at 52 weeks either."},"subtalar":{"name":"Subtalar / midfoot","tier":"investigational","text":"INVESTIGATIONAL. No randomised clinical evidence at these joints. The only supporting work is preclinical."},"shoulder":{"name":"Glenohumeral","tier":"weak","text":"Very limited. One randomised trial, comparing PRP against hyaluronic acid rather than placebo, at a joint where hyaluronic acid evidence is itself limited. No professional body position."},"acj":{"name":"Acromioclavicular / other","tier":"investigational","text":"INVESTIGATIONAL. No randomised evidence at these joints."}};
+
+</script>
+<script>
+(function(){
+ "use strict";
+ var $=function(s,r){return (r||document).querySelector(s);};
+ var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+
+ /* ---- acceptance gate ---- */
+ var gate=$("#gate"), ga=$("#gateAgree"), gb=$("#gateBtn");
+ ga.addEventListener("change",function(){gb.disabled=!ga.checked;});
+ gb.addEventListener("click",function(){ if(ga.checked){ gate.style.display="none"; } });
+
+ /* ---- tabs ---- */
+ $$("nav.tabs button").forEach(function(b){
+  b.addEventListener("click",function(){
+   $$("nav.tabs button").forEach(function(x){x.setAttribute("aria-selected","false");});
+   $$("section.panel").forEach(function(p){p.classList.remove("active");});
+   b.setAttribute("aria-selected","true");
+   var el=$("#p-"+b.dataset.p); if(el) el.classList.add("active");
+   window.scrollTo(0,0);
+  });
+ });
+
+ var g=function(name){return $$('input[data-g="'+name+'"]');};
+ var picked=function(name){return g(name).filter(function(i){return i.checked;});};
+
+ /* highlight stop items when ticked */
+ g("stop").forEach(function(i){
+  i.addEventListener("change",function(){ i.closest("label").classList.toggle("hit", i.checked); });
+ });
+
+ /* ---- joint note ---- */
+ var jSel=$("#jSel"), jNote=$("#jointNote");
+ function tierClass(t){ return t==="negative"||t==="investigational" ? "stop" : (t==="weak" ? "warn" : ""); }
+ function showJoint(){
+  var j=JOINTS[jSel.value]; if(!j){jNote.style.display="none";return;}
+  jNote.className="note "+tierClass(j.tier);
+  jNote.innerHTML="<b>Evidence status \u2014 "+j.name+"</b>"+j.text;
+  jNote.style.display="block";
+ }
+ jSel.addEventListener("change",showJoint); showJoint();
+
+ /* ---- screener ---- */
+ var PHENOW=[1,1,1,1,1,2,1];
+ $("#runScreen").addEventListener("click",function(){
+  var stops=picked("stop"), core=picked("core"), pheno=picked("pheno"),
+      rel=picked("rel"), con=picked("con"), prep=picked("prep");
+  var j=JOINTS[jSel.value], kl=$("#klSel").value, age=$("#ageIn").value;
+  var phenoScore=0; g("pheno").forEach(function(i,ix){ if(i.checked) phenoScore+=PHENOW[ix]; });
+  var cls="proceed", head="", pts=[];
+
+  if(stops.length){
+   cls="stop"; head="STOP \u2014 "+stops.length+" absolute stop condition"+(stops.length>1?"s":"")+" present";
+   stops.forEach(function(i){ pts.push("<b>Stop condition:</b> "+i.closest("label").querySelector(".t").childNodes[0].textContent.trim()); });
+   pts.push("Address these before any injection is considered, then re-screen.");
+  } else {
+   if(j.tier==="negative"){ cls="stop"; pts.push("<b>"+j.name+":</b> "+j.text+" A patient considering treatment at this joint must be told this."); }
+   else if(j.tier==="investigational"){ cls="caution"; pts.push("<b>"+j.name+":</b> "+j.text+" Any use must be documented as investigational."); }
+   else if(j.tier==="weak"){ cls="caution"; pts.push("<b>"+j.name+":</b> "+j.text); }
+   else { pts.push("<b>"+j.name+":</b> "+j.text); }
+
+   if(kl==="4"){ cls="stop"===cls?cls:"caution";
+     pts.push("<b>Stage KL 4:</b> outside the range in which both ESSKA consensus documents found the treatment appropriate. ESSKA-ICRS found PRP <i>not</i> appropriate in KL IV, and the AAHKS negative position is scoped precisely to advanced disease. Consider whether a surgical opinion is the more useful next step."); }
+   else if(kl==="0"||kl==="1"||kl==="2"||kl==="3"){ pts.push("<b>Stage KL "+kl+":</b> within the range covered by the favourable consensus positions (KL 1\u20133 / 0\u2013III)."); }
+   else { cls=cls==="proceed"?"caution":cls; pts.push("<b>Stage not recorded.</b> Grade the radiograph, and record the grading system and projection \u2014 guideline scoping depends on it."); }
+
+   if(age && Number(age)>80){ pts.push("<b>Age above 80:</b> the ESSKA-ICRS appropriateness exercise scoped its favourable finding to patients aged 80 or under."); }
+
+   var coreMiss=5-core.length;
+   if(coreMiss>0){ cls=cls==="stop"?cls:"caution";
+     pts.push("<b>Core treatment incomplete:</b> "+coreMiss+" of 5 items not confirmed. Every favourable position is conditioned on the patient remaining symptomatic <i>despite</i> conservative care. Exercise and weight management have larger effect sizes and lower cost."); }
+   else { pts.push("<b>Core treatment documented as adequate</b> across all five items."); }
+
+   if(phenoScore>=3){ cls=cls==="stop"?cls:"caution";
+     pts.push("<b>Pain phenotype:</b> "+pheno.length+" caution feature"+(pheno.length>1?"s":"")+" present (weighted score "+phenoScore+"). Features of nociplastic or neuropathic-like pain predict poor response to joint-directed treatment, including arthroplasty. Address the phenotype before injecting."); }
+   else if(pheno.length){ pts.push("<b>Pain phenotype:</b> "+pheno.length+" caution feature"+(pheno.length>1?"s":"")+" present. Assess whether the pain is arising from the target joint."); }
+   else { pts.push("<b>Pain phenotype:</b> no caution features recorded \u2014 consistent with a predominantly mechanical, joint-derived pain."); }
+
+   if(rel.length){ cls=cls==="stop"?cls:"caution";
+     pts.push("<b>Relative / precautionary exclusions ("+rel.length+"):</b> each requires individual assessment and specific documentation in the consent. Distinguish precautionary items (active malignancy, pregnancy) from evidence-based ones, and say which is which to the patient. Do not interrupt clinically indicated anticoagulant or antiplatelet therapy for this procedure."); }
+
+   var conMiss=8-con.length;
+   if(conMiss>0){ cls=cls==="stop"?cls:"caution";
+     pts.push("<b>Consent incomplete:</b> "+conMiss+" of 8 disclosures not confirmed. Consent for an unapproved, uncovered, cash-pay treatment is doing double duty as a clinical and a consumer-protection conversation."); }
+   var prepMiss=9-prep.length;
+   if(prepMiss>0){ pts.push("<b>Practice readiness:</b> "+prepMiss+" of 9 items outstanding. Without a validated preparation, a documented dose, and a declared stopping rule, a non-response cannot be interpreted."); }
+   if(!head){ head = cls==="proceed" ? "No blocking issues identified on this screen"
+                : (cls==="caution" ? "Proceed only after addressing the points below" : "Do not proceed"); }
+  }
+
+  var html='<div class="result '+cls+'"><h3>'+head+'</h3><ul>'+pts.map(function(p){return "<li>"+p+"</li>";}).join("")+'</ul>'
+   +'<p style="font-size:.8rem;margin:12px 0 0"><b>This is a structured summary, not a recommendation.</b> It reflects only what was ticked. '
+   +'It is not a clinical decision-support output and must not be used as the basis for treating any individual patient.</p></div>';
+  $("#screenOut").innerHTML=html;
+  $("#screenOut").scrollIntoView({behavior:"smooth",block:"nearest"});
+ });
+ $("#resetScreen").addEventListener("click",function(){
+  $$('#p-screen input[type=checkbox]').forEach(function(i){i.checked=false;i.closest("label").classList.remove("hit");});
+  $("#klSel").value=""; $("#ageIn").value=""; $("#symIn").value=""; $("#screenOut").innerHTML="";
+ });
+ $("#printScreen").addEventListener("click",function(){window.print();});
+
+ /* ---- product ---- */
+ function fmt(n,d){ return (Math.round(n*Math.pow(10,d))/Math.pow(10,d)).toFixed(d); }
+ function calcProd(){
+  var b=parseFloat($("#pBase").value), p=parseFloat($("#pProd").value), v=parseFloat($("#pVol").value),
+      w=parseFloat($("#pWbc").value), wb=parseFloat($("#pWbcBase").value);
+  var notes=[];
+  $("#mEnrich").textContent = (b>0&&p>0) ? fmt(p/b,1)+"\u00d7" : "\u2014";
+  var dose=null;
+  if(p>0&&v>0){ dose=p*v/1000; $("#mDose").textContent=fmt(dose,1)+" \u00d710\u2079"; $("#mPct").textContent=Math.round(dose/10*100)+"%"; }
+  else { $("#mDose").textContent="\u2014"; $("#mPct").textContent="\u2014"; }
+  if(w>=0&&wb>0){
+   var cls = w<=wb ? "Leukocyte-poor" : "Leukocyte-rich";
+   $("#mWbc").textContent=cls+" ("+fmt(w/wb,1)+"\u00d7)";
+   if(w>wb) notes.push(["warn","Leukocyte-rich preparation","Leukocyte-poor preparations have the more favourable indirect evidence for intra-articular use and are associated with less post-injection reaction, although the direct randomised head-to-head comparison did not establish superiority. Reconsider the harvest depth if a leukocyte-poor product was intended."]);
+  } else { $("#mWbc").textContent="\u2014"; }
+
+  var jv=$("#pJoint").value.split("|"), lo=parseFloat(jv[1]), hi=parseFloat(jv[2]);
+  if(v>0 && (v<lo||v>hi)) notes.push(["warn","Volume outside the usual range for this joint","The usual range is "+lo+"\u2013"+hi+" mL. Over-filling a small joint produces capsular distension pain and extravasation without benefit; under-filling reduces the delivered dose."]);
+  if(dose!==null){
+   if(dose<3) notes.push(["warn","Delivered dose well below the proposed reference","A dose threshold near 10\u00d710\u2079 platelets per injection has been proposed in the dose literature. A dose in this range may still be effective \u2014 the relationship is not established as monotonic \u2014 but you should know that this is what you are delivering, and record it."]);
+   else if(dose>=10) notes.push(["ok","Delivered dose at or above the proposed reference","Note that a monotonic dose\u2013response has not been established: at least one characterised retrospective cohort found non-responders receiving a higher platelet dose than responders."]);
+  }
+  if(b>0&&p>0&&p<b) notes.push(["stop","Product concentration is below baseline","This is not a platelet-rich preparation. Check the measurement and the harvest technique before injecting."]);
+  $("#prodNote").innerHTML = notes.map(function(n){
+   var c=n[0]==="ok"?"ok":(n[0]==="stop"?"stop":"warn");
+   return '<div class="note '+c+'"><b>'+n[1]+'</b>'+n[2]+'</div>';
+  }).join("");
+ }
+ ["pBase","pProd","pVol","pWbc","pWbcBase","pJoint"].forEach(function(id){
+  var el=$("#"+id); if(el) el.addEventListener("input",calcProd);
+  if(el) el.addEventListener("change",calcProd);
+ });
+ $("#printProd").addEventListener("click",function(){window.print();});
+ $("#resetProd").addEventListener("click",function(){
+  $$("#p-product input").forEach(function(i){i.value="";}); calcProd(); $("#prodWarn").innerHTML="";
+ });
+ $("#dGuide").addEventListener("change",function(){
+  $("#prodWarn").innerHTML = $("#dGuide").value==="None"
+   ? '<div class="note warn"><b>No image guidance recorded</b>Without confirmed intra-articular placement, a non-response cannot be distinguished from a missed injection. Guidance is mandatory at the hip, thumb base, subtalar, midfoot and acromioclavicular joints, and strongly recommended at the knee, tibiotalar and glenohumeral joints.</div>' : "";
+ });
+
+ /* ---- evidence explorer ---- */
+ function uniq(k){ var s={}; EVIDENCE.forEach(function(e){s[e[k]]=1;}); return Object.keys(s).sort(); }
+ function fill(sel,k,label){
+  var el=$(sel); el.innerHTML='<option value="">All '+label+'</option>'+uniq(k).map(function(v){
+   return '<option value="'+v.replace(/"/g,"&quot;")+'">'+v+"</option>";}).join("");
+ }
+ fill("#fJoint","joint","joints"); fill("#fType","type","study types"); fill("#fDir","direction","directions");
+ function renderEv(){
+  var j=$("#fJoint").value, t=$("#fType").value, d=$("#fDir").value, q=$("#fText").value.toLowerCase().trim();
+  var rows=EVIDENCE.filter(function(e){
+   if(j&&e.joint!==j) return false;
+   if(t&&e.type!==t) return false;
+   if(d&&e.direction!==d) return false;
+   if(q){ var hay=(e.cite+" "+e.note+" "+e.pmid+" "+e.comparator+" "+e.blinding).toLowerCase();
+           if(hay.indexOf(q)<0) return false; }
+   return true;
+  });
+  $("#evCount").textContent=rows.length+" of "+EVIDENCE.length+" records shown. All entries are verified PubMed records.";
+  $("#evBody").innerHTML=rows.map(function(e){
+   var p = e.direction.indexOf("No benefit")===0 ? "no"
+         : (e.direction==="Favourable" ? "yes"
+         : (e.direction==="Against"||e.direction==="Unfavourable"||e.direction==="Low certainty" ? "no"
+         : (e.direction==="Comparator"||e.direction==="Placebo"||e.direction==="Practice"||e.direction==="Reporting"||e.direction==="Heterogeneity" ? "info" : "mid")));
+   return "<tr><td><b>"+e.cite+"</b><br><span style='color:var(--muted)'>"+e.note+"</span><br>"
+    +"<a href='https://pubmed.ncbi.nlm.nih.gov/"+e.pmid+"/' target='_blank' rel='noopener'>PMID "+e.pmid+"</a>"
+    +(e.doi?" &middot; <a href='https://doi.org/"+e.doi+"' target='_blank' rel='noopener'>doi</a>":"")
+    +"</td><td>"+e.joint+"</td><td>"+e.type+"</td><td>"+e.comparator+"</td><td>"+e.blinding+"</td>"
+    +"<td><span class='pill "+p+"'>"+e.direction+"</span></td></tr>";
+  }).join("") || "<tr><td colspan='6' style='color:var(--muted)'>No records match those filters.</td></tr>";
+ }
+ ["#fJoint","#fType","#fDir","#fText"].forEach(function(s){
+  $(s).addEventListener("input",renderEv); $(s).addEventListener("change",renderEv);
+ });
+ $("#fReset").addEventListener("click",function(){
+  $("#fJoint").value="";$("#fType").value="";$("#fDir").value="";$("#fText").value="";renderEv();
+ });
+ renderEv();
+
+ /* ---- outcome tracker ---- */
+ var oInst=$("#oInst");
+ oInst.innerHTML=MCIDS.map(function(m,i){
+  return '<option value="'+i+'">'+m.label+(m.v!==null?" \u2014 threshold "+m.v:"")+"</option>";
+ }).join("");
+ function syncInst(){
+  var m=MCIDS[parseInt(oInst.value,10)];
+  if(m && m.v!==null){ $("#oThr").value=m.v; $("#oSrc").value=m.src; }
+  var lab=m?m.label:"";
+  $("#oDir").value = /KOOS|IKDC|HOOS|higher better/i.test(lab) ? "higher" : "lower";
+ }
+ oInst.addEventListener("change",syncInst); syncInst();
+
+ $("#runOut").addEventListener("click",function(){
+  var thr=parseFloat($("#oThr").value), dir=$("#oDir").value,
+      base=parseFloat($("#sBase").value), m3=parseFloat($("#s3m").value);
+  if(isNaN(thr)||isNaN(base)){
+   $("#outRes").innerHTML='<div class="result caution"><h3>Enter a baseline score and a threshold</h3><p style="font-size:.87rem;margin:6px 0 0">Both must be declared before the response can be classified.</p></div>';
+   return;
+  }
+  function imp(v){ if(isNaN(v)) return null; return dir==="lower" ? base-v : v-base; }
+  var pts=[], tbl="<table><thead><tr><th>Timepoint</th><th>Score</th><th>Improvement</th><th>Threshold met</th></tr></thead><tbody>";
+  [["6 weeks","s6w"],["3 months (primary)","s3m"],["6 months","s6m"],["12 months","s12m"]].forEach(function(r){
+   var v=parseFloat($("#"+r[1]).value); if(isNaN(v)) return;
+   var d=imp(v), met=d>=thr;
+   tbl+="<tr><td>"+r[0]+"</td><td>"+v+"</td><td>"+fmt(d,1)+"</td><td><span class='pill "+(met?"yes":"no")+"'>"+(met?"Yes":"No")+"</span></td></tr>";
+  });
+  tbl+="</tbody></table>";
+
+  var corr=picked("corr").length, pass=$("#passSel").value, cls, head;
+  if(isNaN(m3)){
+   cls="caution"; head="Primary timepoint not yet recorded";
+   pts.push("Record the 3-month score to classify the response against the declared threshold of "+thr+" points.");
+  } else {
+   var d3=imp(m3);
+   if(d3<0){ cls="stop"; head="Deteriorated \u2014 clinical review required";
+    pts.push("The score is <b>worse</b> than baseline. Deterioration after an intra-articular procedure has a differential diagnosis that includes infection. Review clinically before any further injection is given.");
+   } else if(d3>=thr){ cls="proceed"; head="Responder \u2014 improvement of "+fmt(d3,1)+" points meets the declared threshold of "+thr;
+    pts.push("Continue follow-up at 6 and 12 months to characterise duration. No further injections are indicated at present.");
+    if(corr) pts.push("Corroborated on "+corr+" objective measure"+(corr>1?"s":"")+", which strengthens the classification.");
+    else pts.push("No objective corroboration recorded. Analgesic reduction, a nominated functional goal, and a performance measure are all independent of the questionnaire and worth capturing.");
+   } else if(corr>=2){ cls="caution"; head="Partial response \u2014 improvement of "+fmt(d3,1)+" points is below the declared threshold of "+thr;
+    pts.push("The change is below threshold but corroborated on "+corr+" objective measures. Judge this case individually and record the reasoning.");
+   } else { cls="stop"; head="Non-responder \u2014 improvement of "+fmt(d3,1)+" points is below the declared threshold of "+thr;
+    pts.push("By the standard set before treatment, this has not worked for this patient. <b>Do not repeat the course.</b> Redirect to alternative management and record what was communicated.");
+    pts.push("A declared threshold exists precisely so that this conversation can be had honestly. Roughly three-quarters of the observed effect in osteoarthritis trials is contextual, and intra-articular saline alone exceeds the MCID for WOMAC at six months \u2014 so a patient reporting they feel \u201Ca bit better\u201D is expected, and is not evidence that the treatment worked.");
+   }
+   if(pass==="no") pts.push("<b>Patient acceptable symptom state: No.</b> Even where the threshold is met, an unacceptable state means additional management is needed alongside.");
+   else if(pass==="yes") pts.push("<b>Patient acceptable symptom state: Yes.</b>");
+   else pts.push("Patient acceptable symptom state was not asked. It answers a different and often more useful question than the change score.");
+  }
+  $("#outRes").innerHTML='<div class="result '+cls+'"><h3>'+head+'</h3>'+tbl
+   +'<ul>'+pts.map(function(p){return "<li>"+p+"</li>";}).join("")+'</ul>'
+   +'<p style="font-size:.8rem;margin:12px 0 0"><b>This is a calculation against a threshold you declared, not a clinical recommendation.</b></p></div>';
+  $("#outRes").scrollIntoView({behavior:"smooth",block:"nearest"});
+ });
+ $("#resetOut").addEventListener("click",function(){
+  ["sBase","s6w","s3m","s6m","s12m"].forEach(function(i){$("#"+i).value="";});
+  $$('input[data-g="corr"]').forEach(function(i){i.checked=false;});
+  $("#passSel").value=""; $("#outRes").innerHTML="";
+ });
+ $("#printOut").addEventListener("click",function(){window.print();});
+ calcProd();
+})();
+</script>
+</body>
+</html>

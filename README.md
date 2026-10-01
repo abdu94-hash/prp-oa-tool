@@ -10,7 +10,7 @@ Four modules, all running entirely in the browser:
 
 1. **Candidacy screener** — eight-step selection sequence with absolute stop conditions, joint-specific evidence disclosure, pain-phenotype weighting, and consent/readiness checks.
 2. **Product characterisation and dose** — calculates enrichment factor and absolute platelet dose, classifies leukocyte content, warns on volume outside the joint-specific range, and provides the fourteen-field documentation record.
-3. **Evidence explorer** — 87 verified PubMed records, filterable by joint, study type, comparator, blinding, and direction of finding.
+3. **Evidence explorer** — 91 verified PubMed records, filterable by joint, study type, comparator, blinding, and direction of finding.
 4. **Outcome tracker** — applies a threshold declared in advance, handles both scale directions, and classifies response including deterioration.
 
 ## Design constraints
@@ -29,6 +29,11 @@ Four modules, all running entirely in the browser:
 4. The site appears at `https://<username>.github.io/prp-oa-tool/` within a few minutes.
 
 ## Changelog
+
+**1 October 2026** (dose-literature update; general evidence cut-off unchanged)
+- Product & dose: added platelet recovery (yield) and course-total calculations, blood-volume, prepared-volume and earlier-dose fields, and checks for recovery above 100% and injected volume above prepared volume. Guidance added on anticoagulant pairing, analyzer range and syringe dead space.
+- Retired the "vs 10×10⁹ figure" percentage metric, which invited treating that figure as a target. Dose notes now report that dose-stratified meta-analyses disagree about where benefit levels off.
+- Evidence explorer: added Hooper et al. (PM R; 32 RCTs grouped by delivered dose), Berrigan et al. (Curr Rev Musculoskelet Med 2024; proposed >10×10⁹), Berrigan et al. (Arthroscopy 2024; 5.5 vs 2.3×10⁹) and Fadadu et al. (Reg Anesth Pain Med 2019; 33 systems). Patel 2024 note expanded (dose confounded with volume). 91 records.
 
 **16 September 2026**
 - AAPM&R guidance entry relabelled from "Favorable" to "Consensus", with a note that matches the statement's own framing (expert opinion and limited evidence; consideration for selected mild-to-moderate knee OA; calls for dose-dependent RCTs).

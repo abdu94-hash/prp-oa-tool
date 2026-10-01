@@ -30,6 +30,9 @@ Four modules, all running entirely in the browser:
 
 ## Changelog
 
+**1 October 2026, later the same day**
+- Product & dose: added an "Expected yield before preparation" estimator (blood volume, PRP volume, recovery rate and baseline count give expected platelets, concentration, concentration factor and the dose for a planned injection). No default recovery is offered; a button carries over the measured recovery, and manufacturer figures and recoveries of 90% or more are flagged.
+
 **1 October 2026** (dose-literature update; general evidence cut-off unchanged)
 - Product & dose: added platelet recovery (yield) and course-total calculations, blood-volume, prepared-volume and earlier-dose fields, and checks for recovery above 100% and injected volume above prepared volume. Guidance added on anticoagulant pairing, analyzer range and syringe dead space.
 - Retired the "vs 10×10⁹ figure" percentage metric, which invited treating that figure as a target. Dose notes now report that dose-stratified meta-analyses disagree about where benefit levels off.

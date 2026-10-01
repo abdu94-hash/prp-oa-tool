@@ -281,6 +281,27 @@ details.terms li b{display:block}
   <div class="note"><b>How the dose is calculated</b>Absolute platelet dose (&times;10<sup>9</sup>) = product concentration (&times;10<sup>9</sup>/L) &times; injected volume (mL) &divide; 1000. Use the volume actually injected, not the volume prepared; syringe and needle dead space retain part of the product. Dose-stratified meta-analyses disagree about where benefit levels off: one proposed a threshold above 10&times;10<sup>9</sup>, another found no added pain benefit above 10&times;10<sup>9</sup> (see the Evidence tab, filter &ldquo;Dose question&rdquo;), and at least one characterized cohort found non-responders receiving a <i>higher</i> dose than responders. Use the calculation to know what you are delivering, not to assume that more is better.</div>
   <div class="note"><b>How recovery is calculated</b>Platelet recovery (yield, capture efficiency) % = (product volume prepared &times; product concentration) &divide; (blood volume &times; baseline count) &times; 100. Illustration: (6 mL &times; 900) &divide; (30 mL &times; 240) &times; 100 = 75%. Pair each volume with a count measured in the same state: if the baseline count comes from a separate tube without the kit's anticoagulant, enter the blood volume drawn excluding anticoagulant. If the product count exceeds the analyzer's validated range, dilute as its instructions direct and correct for the dilution. Recovery describes device and operator performance; it is not a clinical outcome or a target.</div>
 
+  <h3>Expected yield before preparation</h3>
+  <p class="lede">An estimate for planning the draw, made before any product exists. It depends entirely on the recovery rate you enter, so use your own device's measured recovery. After preparation, measure the product and record the measured values above; this estimate does not replace them.</p>
+  <div class="grid2">
+   <div class="field"><label for="eBlood">Blood volume to draw (mL, excluding anticoagulant)</label><input id="eBlood" type="number" min="0" step="any" placeholder="e.g. 54"></div>
+   <div class="field"><label for="ePrp">PRP volume to be prepared (mL)</label><input id="ePrp" type="number" min="0" step="any" placeholder="e.g. 7"></div>
+   <div class="field"><label for="eRec">Device recovery rate (%)</label><input id="eRec" type="number" min="0" max="100" step="any" placeholder="from your paired counts"></div>
+   <div class="field"><label for="eRecSrc">Source of the recovery rate</label><select id="eRecSrc"><option value="measured">Measured in this clinic (paired counts)</option><option value="maker">Manufacturer or published figure</option></select></div>
+   <div class="field"><label for="eBase">Baseline platelet count</label><input id="eBase" type="number" min="0" step="any" placeholder="e.g. 250"></div>
+   <div class="field"><label for="eUnit">Units for the baseline count</label><select id="eUnit"><option value="1">&times;10<sup>9</sup>/L (= &times;10<sup>3</sup>/&micro;L), e.g. 250</option><option value="0.001">per &micro;L, e.g. 250,000</option></select></div>
+   <div class="field"><label for="eVol">Planned injection volume (mL, optional)</label><input id="eVol" type="number" min="0" step="any" placeholder="e.g. 5"></div>
+  </div>
+  <div class="grid2" style="margin-top:16px">
+   <div class="metric"><div class="lab">Expected platelets in the PRP</div><div class="big" id="eTotal">&mdash;</div></div>
+   <div class="metric"><div class="lab">Expected PRP concentration</div><div class="big" id="eConc">&mdash;</div></div>
+   <div class="metric"><div class="lab">Expected concentration factor</div><div class="big" id="eFold">&mdash;</div></div>
+   <div class="metric"><div class="lab">Expected dose, planned injection</div><div class="big" id="eDose">&mdash;</div></div>
+  </div>
+  <div id="estNote"></div>
+  <div class="note"><b>How the estimate is calculated</b>Expected platelets (&times;10<sup>9</sup>) = baseline count (&times;10<sup>9</sup>/L) &times; blood volume (mL) &divide; 1000 &times; recovery. Expected concentration = expected platelets &times; 1000 &divide; PRP volume. Expected concentration factor = recovery &times; blood volume &divide; PRP volume. Illustration with a 60% recovery: 250 &times; 54 &divide; 1000 &times; 0.60 = 8.1 &times;10<sup>9</sup>; 8.1 &times; 1000 &divide; 7 = 1157 &times;10<sup>9</sup>/L; 0.60 &times; 54 &divide; 7 = 4.6&times;. The illustration's recovery is an example, not a typical or recommended value.</div>
+  <div class="btnrow"><button class="btn sec" id="eUseRec">Use the recovery measured above</button><button class="btn sec" id="eExample">Load the worked example</button></div>
+
   <h3>Documentation record</h3>
   <p class="lede">The fourteen fields that make a subsequent non-response interpretable. Nothing entered here is stored or transmitted; use <b>Print record</b> to produce a paper copy for the notes.</p>
   <div class="grid2">
@@ -513,6 +534,25 @@ const JOINTS={"knee":{"name":"Knee","tier":"mixed","text":"Mixed. The largest an
 
  /* ---- product ---- */
  function fmt(n,d){ return (Math.round(n*Math.pow(10,d))/Math.pow(10,d)).toFixed(d); }
+ function estNotesFor(o){
+  var n=[];
+  if(!(o.B>0&&o.P>0&&o.base>0)) return n;
+  if(o.recRaw===""){ n.push([o.INFO,"Enter a recovery rate","Use the recovery your device achieved in your own paired whole-blood and product counts; ten consecutive pairs are enough to characterize a stable protocol (Chapter 11). No default is offered: device recoveries vary widely, and in the DEPA analysis no device recovered more than 90% of the drawn platelets."]); return n; }
+  if(!(o.rec>0&&o.rec<=100)){ n.push(["stop","Recovery must be between 0 and 100%","Enter the recovery as a percentage, for example 60 for 60%."]); return n; }
+  if(o.fold<1) n.push(["stop","Expected product is not platelet-rich","With this recovery and these volumes the PRP would be less concentrated than whole blood. Check the volumes, or reduce the PRP volume."]);
+  if(o.rec>=90) n.push(["warn","Recovery at the top of published performance","In the DEPA analysis no device recovered more than 90% of the drawn platelets. Use a figure measured in your own clinic."]);
+  if(o.src==="maker") n.push(["warn","Manufacturer or published recovery","These figures are obtained under the source's own conditions and may not match your device, operator and patients. Treat the result as a rough planning figure and replace the recovery with your own measured value."]);
+  if(o.V>0&&o.V>o.P) n.push(["stop","Planned injection exceeds the PRP volume","The planned injection cannot be larger than the volume prepared."]);
+  if(o.unitPerUL && o.baseRaw<2000) n.push(["warn","Check the units","This value is unusually low for a count per µL. If the count is in ×10⁹/L, change the units selector."]);
+  if(!o.unitPerUL && o.baseRaw>2000) n.push(["warn","Check the units","This value is unusually high for ×10⁹/L. If the count is per µL, change the units selector."]);
+  n.push([o.INFO,"An estimate, not a dose record","Measure the product after preparation and record the measured counts and dose (QG7). The estimate assumes the recovery holds for this patient; it does not identify an optimal dose or concentration factor, and none has been established."]);
+  return n;
+ }
+ function estimate(o){
+  var r=o.rec/100, total=o.base*o.B/1000*r, conc=total*1000/o.P, fold=r*o.B/o.P, dose=o.V>0?conc*o.V/1000:NaN;
+  return {total:total,conc:conc,fold:fold,dose:dose};
+ }
+ var lastRec=null;
  function calcProd(){
   var b=parseFloat($("#pBase").value), p=parseFloat($("#pProd").value), v=parseFloat($("#pVol").value),
       w=parseFloat($("#pWbc").value), wb=parseFloat($("#pWbcBase").value),
@@ -525,8 +565,8 @@ const JOINTS={"knee":{"name":"Knee","tier":"mixed","text":"Mixed. The largest an
    $("#mCourse").textContent=priorBad?"\u2014":fmt(dose+(prior>0?prior:0),1)+" \u00d710\u2079"; }
   else { $("#mDose").textContent="\u2014"; $("#mCourse").textContent="\u2014"; }
   var rec=null;
-  if(b>0&&p>0&&bv>0&&pv>0){ rec=(pv*p)/(bv*b)*100; $("#mRec").textContent=Math.round(rec)+"%"; }
-  else $("#mRec").textContent="\u2014";
+  if(b>0&&p>0&&bv>0&&pv>0){ rec=(pv*p)/(bv*b)*100; $("#mRec").textContent=Math.round(rec)+"%"; lastRec=rec; }
+  else { $("#mRec").textContent="\u2014"; lastRec=null; }
   if(w>=0&&wb>0){
    var cls = w<=wb ? "Leukocyte-poor" : "Leukocyte-rich";
    $("#mWbc").textContent=cls+" ("+fmt(w/wb,1)+"\u00d7)";
@@ -555,8 +595,26 @@ const JOINTS={"knee":{"name":"Knee","tier":"mixed","text":"Mixed. The largest an
  });
  $("#printProd").addEventListener("click",function(){window.print();});
  $("#resetProd").addEventListener("click",function(){
-  $$("#p-product input").forEach(function(i){i.value="";}); calcProd(); $("#prodWarn").innerHTML="";
+  $$("#p-product input").forEach(function(i){i.value="";}); calcProd(); calcEst(); $("#prodWarn").innerHTML="";
  });
+ function calcEst(){
+  var unitMul=parseFloat($("#eUnit").value)||1, baseRaw=parseFloat($("#eBase").value);
+  var o={B:parseFloat($("#eBlood").value),P:parseFloat($("#ePrp").value),recRaw:$("#eRec").value.trim(),rec:parseFloat($("#eRec").value),src:$("#eRecSrc").value,
+         base:baseRaw*unitMul,baseRaw:baseRaw,unitPerUL:unitMul!==1,V:parseFloat($("#eVol").value),INFO:"info"};
+  var ok=o.B>0&&o.P>0&&o.base>0&&o.rec>0&&o.rec<=100;
+  if(ok){ var e=estimate(o); o.fold=e.fold;
+   $("#eTotal").textContent=fmt(e.total,1)+" ×10⁹"; $("#eConc").textContent=Math.round(e.conc)+" ×10⁹/L";
+   $("#eFold").textContent=fmt(e.fold,1)+"×"; $("#eDose").textContent=isNaN(e.dose)?"—":fmt(e.dose,1)+" ×10⁹";
+  } else { ["#eTotal","#eConc","#eFold","#eDose"].forEach(function(s){$(s).textContent="—";}); o.fold=NaN; }
+  $("#estNote").innerHTML=estNotesFor(o).map(function(n){ var c=n[0]||"info"; return '<div class="note '+c+'"><b>'+n[1]+'</b>'+n[2]+'</div>';}).join("");
+ }
+ ["eBlood","ePrp","eRec","eRecSrc","eBase","eUnit","eVol"].forEach(function(id){ var el=$("#"+id); el.addEventListener("input",calcEst); el.addEventListener("change",calcEst); });
+ $("#eUseRec").addEventListener("click",function(){
+  if(lastRec!==null && lastRec>0){ $("#eRec").value=String(Math.round(lastRec)); $("#eRecSrc").value="measured"; calcEst(); }
+  else $("#estNote").innerHTML='<div class="note warn"><b>No measured recovery yet</b>Enter the baseline count, product concentration, blood volume and prepared volume above to calculate a measured recovery first.</div>';
+ });
+ $("#eExample").addEventListener("click",function(){ $("#eBlood").value="54"; $("#ePrp").value="7"; $("#eRec").value="60"; $("#eRecSrc").value="measured"; $("#eBase").value="250"; $("#eUnit").value="1"; $("#eVol").value="5"; calcEst(); });
+ calcEst();
  $("#dGuide").addEventListener("change",function(){
   $("#prodWarn").innerHTML = $("#dGuide").value==="None"
    ? '<div class="note warn"><b>No image guidance recorded</b>Without confirmed intra-articular placement, a non-response cannot be distinguished from a missed injection. Guidance is mandatory at the hip, thumb base, subtalar, midfoot and acromioclavicular joints, and strongly recommended at the knee, tibiotalar and glenohumeral joints.</div>' : "";
